@@ -1,0 +1,24 @@
+<nz-layout>
+  <nz-sider
+    [nzCollapsed]="isCollapsed"
+    (nzCollapsedChange)="onCollapsedChange($event)"
+    [nzBreakpoint]="'lg'"
+  >
+    <div class="sider">
+      <div class="sider__nav">
+        <app-nav />
+      </div>
+      <div class="sider__avatar">
+        <app-avatar />
+      </div>
+    </div>
+  </nz-sider>
+  <nz-content>
+    <div class="content">
+      <nz-header>
+        <app-header />
+      </nz-header>
+      <router-outlet />
+    </div>
+  </nz-content>
+</nz-layout>

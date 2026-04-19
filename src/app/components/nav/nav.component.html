@@ -1,0 +1,35 @@
+<ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: navData }"></ng-container>
+
+  <ng-template #menuTpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <li
+        *ngIf="menu.children && menu.children.length > 0"
+        nz-submenu
+        [nzTitle]="menu.title"
+        [nzIcon]="menu.icon || ''"
+      >
+        <ul>
+          <ng-container
+            *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"
+          ></ng-container>
+        </ul>
+      </li>
+
+      <li
+        *ngIf="!menu.children || menu.children.length === 0"
+        nz-menu-item
+        nz-tooltip
+        nzTooltipPlacement="right"
+        [nzTooltipTitle]="isCollapsed ? menu.title : ''"
+        [nzSelected]="menu.selected"
+        nzMatchRouter
+      >
+        <a [routerLink]="menu.route" routerLinkActive="ant-menu-item-selected">
+          <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+          <span>{{ menu.title }}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ng-template>
+</ul>

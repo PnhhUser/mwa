@@ -1,12 +1,34 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { LoadingComponent } from './shared/components/loading/loading.component';
+import { CommonModule } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth.service';
+import { LoaderService } from './core/services/loader.service';
+import ROUTES_PATH from './core/consts/route.const';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, LoadingComponent, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.less'
 })
 export class App {
-  protected readonly title = signal('ManagerHub');
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  readonly loaderService = inject(LoaderService);
+
+  ngOnInit() {
+    this.authService.checkAuthStatus().subscribe({
+      next: (user) => {
+        if (user) {
+          this.router.navigate([`/${ROUTES_PATH.dashboard}`]);
+        } else {
+          this.router.navigate([`/${ROUTES_PATH.login}`]);
+        }
+      },
+      error: () => {
+        this.router.navigate([`/${ROUTES_PATH.login}`]);
+      },
+    });
+  }
 }

@@ -1,0 +1,31 @@
+<div class="avatar-wrapper">
+  @if (!isCollapsed) {
+    <div class="avatar-wrapper__item">
+      <nz-avatar
+        nz-popover
+        [nzPopoverContent]="contentTemplate"
+        nzShape="square"
+        nzSize="large"
+        [nzSrc]="avatar"
+      ></nz-avatar>
+    </div>
+    <div class="avatar-wrapper__item"></div>
+  }
+  <div class="avatar-wrapper__item">
+    <button
+      nz-button
+      (click)="logout()"
+      [ngStyle]="isCollapsed ? { width: '63px', height: '38px' } : {}"
+    >
+      <nz-icon nzType="logout" nzTheme="outline" />
+    </button>
+  </div>
+</div>
+
+<ng-template #contentTemplate>
+  <a routerLink="/">
+    <span class="avatar-name" nz-typography>
+      <strong>{{ 'admin' | firstUpper }}</strong>
+    </span>
+  </a>
+</ng-template>

@@ -1,0 +1,33 @@
+<div class="bg-login">
+  @if (!loaderService.active()) {
+    <nz-card class="login-form" nzTitle="Đăng nhập vào ManagerHub">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="login-form__group">
+          <input
+            nz-input
+            type="text"
+            formControlName="username"
+            id="username"
+            autocomplete="username"
+            placeholder="Tên người dùng"
+          />
+        </div>
+        <br />
+        <div class="login-form__group">
+          <input
+            nz-input
+            type="password"
+            formControlName="password"
+            id="password"
+            autocomplete="current-password"
+            placeholder="Mật khẩu"
+          />
+        </div>
+        <button nz-button nzType="primary" type="submit" nzBlock class="login-form__btn-submit">
+          <nz-icon nzType="login" nzTheme="outline" />
+          Đăng nhập
+        </button>
+      </form>
+    </nz-card>
+  }
+</div>
