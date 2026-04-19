@@ -7,6 +7,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { CollapseService } from '../../core/services/collapse.service';
 import { NavModel } from '../../model/nav.model';
+import ROUTES_PATH from '../../core/consts/route.const';
 
 @Component({
   selector: 'app-nav',
@@ -29,9 +30,9 @@ export class NavComponent {
   // Cây danh mục mẫu
   navData: NavModel[] = [
     {
-      title: 'Bảng điều khiển',
+      title: 'Trình quản lí',
       icon: 'windows',
-      route: '/dashboard',
+      route: '/' + ROUTES_PATH.manage,
     },
   ];
 

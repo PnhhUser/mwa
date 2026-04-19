@@ -1,0 +1,11 @@
+<nz-card class="modern-card" (click)="onNavigate()">
+  <div class="main-body">
+    <div class="icon-box">
+      <nz-icon nzType="appstore" nzTheme="outline" />
+    </div>
+    <div class="main-content">
+      <div class="title">{{ card()?.name }}</div>
+      <div class="sub-title">ID: {{ card()?.id }}</div>
+    </div>
+  </div>
+</nz-card>

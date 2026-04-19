@@ -1,10 +1,10 @@
-const dashboard: string = 'dashboard';
+const manage: string = 'manage';
 const accounts: string = 'accounts';
 const products: string = 'products';
 const login: string = 'login';
 
 const ROUTES_PATH = {
-  dashboard,
+  manage,
   login,
   accounts,
   products,

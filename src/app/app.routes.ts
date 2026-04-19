@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DashboardRoute } from './pages/dashboard/dashboard.route';
+import { ManageRoute } from './pages/manage/manage.route';
 import { LayoutMain } from './layout/layout-main/layout-main';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: '',
     component: LayoutMain,
     canActivate: [authGuard],
-    children: [...DashboardRoute],
+    children: [{ path: '', redirectTo: ROUTES_PATH.manage, pathMatch: 'full' }, ...ManageRoute],
   },
   {
     path: ROUTES_PATH.login,

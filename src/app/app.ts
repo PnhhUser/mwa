@@ -19,10 +19,11 @@ export class App {
 
   ngOnInit() {
     this.authService.checkAuthStatus().subscribe({
-      next: (user) => {
-        if (user) {
-          this.router.navigate([`/${ROUTES_PATH.dashboard}`]);
-        } else {
+      next: (isAuthenticated) => {
+        const currentUrl = this.router.url;
+        const isOnLoginPage = currentUrl.includes(ROUTES_PATH.login);
+
+        if (!isAuthenticated && !isOnLoginPage) {
           this.router.navigate([`/${ROUTES_PATH.login}`]);
         }
       },

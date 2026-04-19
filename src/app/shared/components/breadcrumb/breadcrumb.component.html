@@ -1,0 +1,25 @@
+<nz-breadcrumb>
+  @for (breadcrumb of breadcrumbs(); track breadcrumb.url; let last = $last; let i = $index) {
+    <nz-breadcrumb-item>
+      @if (!last) {
+        <a
+          [routerLink]="breadcrumb.url.split('/')"
+          routerLinkActive="active"
+          class="breadcrumb-link"
+        >
+          @if (breadcrumb.icon) {
+            <span nz-icon [nzType]="breadcrumb.icon"></span>
+          }
+          <span>{{ breadcrumb.label }}</span>
+        </a>
+      } @else {
+        <span class="breadcrumb-current">
+          @if (breadcrumb.icon) {
+            <span nz-icon [nzType]="breadcrumb.icon"></span>
+          }
+          <span>{{ breadcrumb.label }}</span>
+        </span>
+      }
+    </nz-breadcrumb-item>
+  }
+</nz-breadcrumb>

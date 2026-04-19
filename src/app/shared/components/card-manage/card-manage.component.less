@@ -1,0 +1,60 @@
+.modern-card {
+  border-radius: 8px; // AntD v5 dùng 8px, v4 dùng 4px/2px. 8px sẽ nhìn "nhẹ" hơn.
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  border: 1px solid #f0f0f0;
+
+  &:hover {
+    border-color: #40a9ff; // @primary-5: Màu xanh hover của Ng-Zorro
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Đổ bóng nhẹ chuẩn AntD
+
+    .main-body .icon-box {
+      background: #e6f7ff; // @primary-1: Màu nền xanh nhạt khi hover
+      nz-icon {
+        color: #1890ff; // @primary-6: Màu icon chính
+      }
+    }
+  }
+
+  :host ::ng-deep .ant-card-body {
+    padding: 16px !important;
+  }
+
+  .main-body {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      background: #fafafa; // @gray-2: Màu nền trung tính
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s;
+
+      nz-icon {
+        font-size: 20px;
+        color: #8c8c8c; // @gray-7
+      }
+    }
+
+    .main-content {
+      .title {
+        font-size: 15px;
+        font-weight: 500; // AntD thường dùng 500 cho text chính
+        color: rgba(0, 0, 0, 0.85); // Màu text chính chuẩn AntD
+        line-height: 1.4;
+      }
+      .sub-title {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.45); // Màu text phụ chuẩn AntD
+        margin-top: 2px;
+        font-family: 'Roboto Mono', monospace; // ID nhìn sẽ "tech" hơn
+      }
+    }
+  }
+}
