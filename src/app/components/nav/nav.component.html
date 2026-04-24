@@ -1,4 +1,4 @@
-<ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed">
+<ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed()">
   <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: navData }"></ng-container>
 
   <ng-template #menuTpl let-menus>
@@ -21,7 +21,7 @@
         nz-menu-item
         nz-tooltip
         nzTooltipPlacement="right"
-        [nzTooltipTitle]="isCollapsed ? menu.title : ''"
+        [nzTooltipTitle]="isCollapsed() ? menu.title : ''"
         [nzSelected]="menu.selected"
         nzMatchRouter
       >

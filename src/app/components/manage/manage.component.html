@@ -1,0 +1,9 @@
+<div class="manage">
+  <nz-tabs nzTabPosition="left" class="custom-side-tabs">
+    @for (tab of currentTabs(); track tab.label) {
+      <nz-tab [nzTitle]="tab.label">
+        <ng-container *ngComponentOutlet="tab.component"></ng-container>
+      </nz-tab>
+    }
+  </nz-tabs>
+</div>

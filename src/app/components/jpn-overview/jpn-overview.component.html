@@ -1,0 +1,7 @@
+<div class="product-overview">
+  <div class="product-overview__stat">
+    @for (card of statCardList; track card) {
+      <app-stat-card [card]="card" />
+    }
+  </div>
+</div>

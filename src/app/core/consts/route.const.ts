@@ -1,13 +1,11 @@
 const manage: string = 'manage';
-const accounts: string = 'accounts';
-const products: string = 'products';
+const manage_name: string = 'manageName';
 const login: string = 'login';
 
 const ROUTES_PATH = {
   manage,
   login,
-  accounts,
-  products,
+  manage_name,
 };
 
 export default ROUTES_PATH;

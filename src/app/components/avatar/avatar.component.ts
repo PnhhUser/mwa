@@ -31,9 +31,7 @@ export class AvatarComponent {
   protected readonly avatar = 'assets/images/avatar.jpg';
   private _collapseService = inject(CollapseService);
 
-  get isCollapsed(): boolean {
-    return this._collapseService.isCollapsed().isCollapsed;
-  }
+  isCollapsed = this._collapseService.isCollapsed;
 
   logout(): void {
     this._autService.logout();

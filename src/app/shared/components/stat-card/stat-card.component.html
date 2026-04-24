@@ -1,0 +1,10 @@
+@if (card(); as cardItem) {
+  <nz-card>
+    <div class="title">
+      {{ cardItem.name }}
+    </div>
+    <div class="stat">
+      {{ formatNumber(cardItem.stat) }}
+    </div>
+  </nz-card>
+}

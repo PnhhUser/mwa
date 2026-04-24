@@ -1,25 +1,15 @@
 import { Component } from '@angular/core';
-import { CardManageComponent } from '../../shared/components/card-manage/card-manage.component';
-import { CardManage } from '../../model/card-manage.model';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { ManageCardComponent } from '../../shared/components/manage-card/manage-card.component';
+import { MANAGE_MAP } from '../../core/config/manage.config';
+import { ManageCard } from '../../model/manage-card.model';
 
 @Component({
   selector: 'app-dashboard-list-manager',
   standalone: true,
-  imports: [CardManageComponent, NzCardModule, NzIconModule],
+  imports: [ManageCardComponent],
   templateUrl: './manage-list.component.html',
   styleUrl: './manage-list.component.less',
 })
-export class ManageList {
-  cardManageList: CardManage[] = [
-    {
-      id: '4654dsf64dsf5sdf',
-      name: 'Learn rank',
-    },
-  ];
-
-  addNewCard(): void {
-    console.log('Mở modal hoặc chuyển hướng trang tạo mới...');
-  }
+export class ManageListComponent {
+  cardManageList: ManageCard[] = MANAGE_MAP;
 }

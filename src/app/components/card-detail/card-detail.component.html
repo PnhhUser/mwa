@@ -1,0 +1,96 @@
+<div class="card-detail">
+  <div class="card-detail__content">
+    <nz-list [nzBordered]="true">
+      <!-- TYPE -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Loại thẻ:</span>
+          <span *ngIf="!isEdit()"> {{ formatCardType(editCard.type) }}</span>
+        </span>
+
+        @if (isEdit()) {
+          <nz-select [ngModel]="editCard.type" style="width: 220px">
+            <nz-option nzValue="character" nzLabel="Ký tự"></nz-option>
+            <nz-option nzValue="vocabulary" nzLabel="Từ vựng"></nz-option>
+          </nz-select>
+        }
+      </nz-list-item>
+
+      <!-- SCRIPT -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Loại chữ:</span>
+          <span *ngIf="!isEdit()">{{ editCard.script }}</span>
+        </span>
+
+        @if (isEdit()) {
+          <nz-select [ngModel]="editCard.script" style="width: 220px">
+            <nz-option nzValue="hiragana" nzLabel="Hiragana"></nz-option>
+            <nz-option nzValue="katakana" nzLabel="Katakana"></nz-option>
+            <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option>
+          </nz-select>
+        }
+      </nz-list-item>
+
+      <!-- TERM -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Mục học:</span>
+          <strong *ngIf="!isEdit()">{{ editCard.term }}</strong>
+        </span>
+        @if (isEdit()) {
+          <input nz-input [(ngModel)]="editCard.term" style="width: 220px" />
+        } @else {
+          <nz-icon nzType="sound" nzTheme="outline" (click)="onSound(editCard.term)" />
+        }
+      </nz-list-item>
+
+      <!-- READING -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Cách đọc:</span>
+          <em *ngIf="!isEdit()">{{ editCard.reading }}</em>
+        </span>
+
+        @if (isEdit()) {
+          <input nz-input [(ngModel)]="editCard.reading" style="width: 220px" />
+        }
+      </nz-list-item>
+
+      <!-- MEANING  -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Nghĩa:</span>
+          <span *ngIf="!isEdit()">{{ editCard.meaning }}</span>
+        </span>
+
+        @if (isEdit()) {
+          <input nz-input [(ngModel)]="editCard.meaning" style="width: 220px" />
+        }
+      </nz-list-item>
+
+      <!-- SHOW -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Hiển thị:</span>
+        </span>
+
+        @if (isEdit()) {
+          <nz-switch [(ngModel)]="editCard.show" nzSize="small" />
+        } @else {
+          <nz-tag [nzColor]="formatColor(editCard.show)">
+            {{ editCard.show ? 'Có' : 'không' }}
+          </nz-tag>
+        }
+      </nz-list-item>
+    </nz-list>
+  </div>
+  <div class="card-detail__actions">
+    @if (isEdit()) {
+      <button nz-button nzType="primary" (click)="onConfirm()">Xác nhận</button>
+      <button nz-button nzDanger (click)="onCancel()">Hủy</button>
+    } @else {
+      <button nz-button nzType="primary" (click)="onEdit()">Thay đổi</button>
+    }
+  </div>
+</div>

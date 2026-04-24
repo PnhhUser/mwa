@@ -1,11 +1,5 @@
 <div class="grid-temp-manage">
-  <nz-card class="plus-card" (click)="addNewCard()">
-    <div class="plus-content">
-      <nz-icon nzType="plus" nzTheme="outline"></nz-icon>
-      <span>Thêm mới</span>
-    </div>
-  </nz-card>
-  @for (card of cardManageList; track card.id) {
-    <app-card-manage [card]="card"></app-card-manage>
+  @for (card of cardManageList; track card.name) {
+    <app-manage-card [card]="card"></app-manage-card>
   }
 </div>

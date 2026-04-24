@@ -1,6 +1,8 @@
 <nz-layout>
   <nz-sider
-    [nzCollapsed]="isCollapsed"
+    [nzCollapsible]="isCollapsed()"
+    [nzCollapsed]="isCollapsed()"
+    [nzTrigger]="null"
     (nzCollapsedChange)="onCollapsedChange($event)"
     [nzBreakpoint]="'lg'"
   >

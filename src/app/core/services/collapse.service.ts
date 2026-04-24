@@ -1,15 +1,16 @@
 import { Injectable, signal } from '@angular/core';
-import { CollapseModel } from '../../model/collapse.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollapseService {
-  private _collapseState = signal<CollapseModel>({ isCollapsed: false });
-
-  readonly isCollapsed = this._collapseState.asReadonly();
+  readonly isCollapsed = signal<boolean>(false);
 
   toggle(): void {
-    this._collapseState.update((s) => ({ ...s, isCollapsed: !s.isCollapsed }));
+    this.isCollapsed.update((v) => !v);
+  }
+
+  setCollapsed(value: boolean): void {
+    this.isCollapsed.set(value);
   }
 }

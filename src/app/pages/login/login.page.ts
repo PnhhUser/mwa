@@ -32,7 +32,7 @@ import { LoaderService } from '../../core/services/loader.service';
   styleUrl: './login.page.less',
 })
 export class LoginPage {
-  protected readonly loginForm: FormGroup<{
+  protected loginForm: FormGroup<{
     username: FormControl<string>;
     password: FormControl<string>;
   }>;
@@ -95,6 +95,6 @@ export const handleLoginValidationAlert = (
   }
 
   if (message) {
-    alertService.show('LỖI ĐĂNG NHẬP', message, 'error', 4000);
+    alertService.show('', message, 'warning', 4000);
   }
 };

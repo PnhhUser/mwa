@@ -1,0 +1,16 @@
+<div class="account-action">
+  <button nz-button class="account-action__btn">Thêm tài khoản</button>
+  <input
+    nz-input
+    type="text"
+    [(ngModel)]="searchText"
+    name="search"
+    placeholder="Tìm kiếm người dùng..."
+  />
+</div>
+
+<app-table
+  [data]="filteredData()"
+  [columns]="colConfig"
+  (rowClick)="handleRowClick($event)"
+></app-table>

@@ -24,13 +24,9 @@ import { HeaderComponent } from '../../components/header/header.component';
 export class LayoutMain {
   private _collapseService = inject(CollapseService);
 
-  get isCollapsed(): boolean {
-    return this._collapseService.isCollapsed().isCollapsed;
-  }
+  isCollapsed = this._collapseService.isCollapsed;
 
   onCollapsedChange(collapsed: boolean): void {
-    if (collapsed !== this.isCollapsed) {
-      this._collapseService.toggle();
-    }
+    this._collapseService.setCollapsed(collapsed);
   }
 }

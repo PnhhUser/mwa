@@ -1,0 +1,60 @@
+.modern-card {
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  border: 1px solid #e5e7eb;
+  // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    border-color: #40a9ff;
+
+    .main-body .icon-box {
+      background: #e6f7ff;
+      nz-icon {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  :host ::ng-deep .ant-card-body {
+    padding: 16px !important;
+  }
+
+  .main-body {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      background: #fafafa;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s;
+
+      nz-icon {
+        font-size: 20px;
+        color: #8c8c8c;
+      }
+    }
+
+    .main-content {
+      .title {
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.85);
+        line-height: 1.4;
+      }
+      .sub-title {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.45);
+        margin-top: 2px;
+        font-family: 'Roboto Mono', monospace;
+      }
+    }
+  }
+}

@@ -14,9 +14,7 @@ import { CollapseService } from '../../core/services/collapse.service';
 export class HeaderComponent {
   private _collapseService = inject(CollapseService);
 
-  get isCollapsed(): boolean {
-    return this._collapseService.isCollapsed().isCollapsed;
-  }
+  isCollapsed = this._collapseService.isCollapsed;
 
   onToggleNav(): void {
     this._collapseService.toggle();

@@ -1,0 +1,20 @@
+<div class="flash-card-action">
+  <button nz-button class="account-action__btn" (click)="handleAddDrawer()">Thêm thẻ</button>
+  <input
+    nz-input
+    type="text"
+    [(ngModel)]="searchText"
+    name="search"
+    placeholder="Tìm kiếm thẻ..."
+  />
+</div>
+
+<app-table
+  [data]="filteredData()"
+  [columns]="colConfig"
+  (rowClick)="handleRowClick($event)"
+></app-table>
+
+<ng-template #extraTpl>
+  <app-drawer-close (remove)="handleRemove()"></app-drawer-close>
+</ng-template>

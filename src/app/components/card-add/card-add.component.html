@@ -1,0 +1,58 @@
+<div class="card-detail">
+  <div class="card-detail__content">
+    <form [formGroup]="addForm">
+      <nz-list>
+        <!-- TYPE -->
+        <nz-list-item>
+          <span>Loại thẻ</span>
+          <nz-select formControlName="type">
+            <nz-option nzValue="character" nzLabel="Ký tự"></nz-option>
+            <nz-option nzValue="vocabulary" nzLabel="Từ vựng"></nz-option>
+          </nz-select>
+        </nz-list-item>
+
+        <!-- SCRIPT -->
+        <nz-list-item>
+          <span>Loại chữ</span>
+          <nz-select formControlName="script">
+            <nz-option nzValue="hiragana" nzLabel="Hiragana"></nz-option>
+            <nz-option nzValue="katakana" nzLabel="Katakana"></nz-option>
+            <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option>
+          </nz-select>
+        </nz-list-item>
+
+        <!-- TERM -->
+        <nz-list-item>
+          <span>Mục học</span>
+          <input nz-input type="text" formControlName="term" placeholder="neko -> ねこ" />
+        </nz-list-item>
+
+        <!-- READING -->
+        <nz-list-item>
+          <span>Cách đọc</span>
+          <input
+            nz-input
+            type="text"
+            formControlName="reading"
+            placeholder="nhập romaji vd: neko"
+          />
+        </nz-list-item>
+
+        <!-- MEANING -->
+        <nz-list-item>
+          <span>Nghĩa</span>
+          <input nz-input type="text" formControlName="meaning" placeholder="nghĩa phiên dịch" />
+        </nz-list-item>
+
+        <!-- SHOW -->
+        <nz-list-item>
+          <span>Hiển thị</span>
+          <nz-switch formControlName="show" nzSize="small"></nz-switch>
+        </nz-list-item>
+      </nz-list>
+    </form>
+  </div>
+  <div class="card-detail__actions">
+    <button nz-button nzType="primary" (click)="onSubmit()">Xác nhận</button>
+  </div>
+</div>

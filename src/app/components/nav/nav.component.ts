@@ -27,7 +27,6 @@ import ROUTES_PATH from '../../core/consts/route.const';
 export class NavComponent {
   private _collapseService = inject(CollapseService);
 
-  // Cây danh mục mẫu
   navData: NavModel[] = [
     {
       title: 'Trình quản lí',
@@ -36,7 +35,5 @@ export class NavComponent {
     },
   ];
 
-  get isCollapsed(): boolean {
-    return this._collapseService.isCollapsed().isCollapsed;
-  }
+  isCollapsed = this._collapseService.isCollapsed;
 }

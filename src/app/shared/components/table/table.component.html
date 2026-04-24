@@ -1,0 +1,54 @@
+<nz-table
+  #dataTable
+  [nzBordered]="config().bordered"
+  [nzData]="data()"
+  [nzTableLayout]="'fixed'"
+  [nzShowPagination]="config().pagination"
+  [nzPageSize]="config().pageSize"
+  [nzFrontPagination]="config().pagination"
+>
+  <thead>
+    <tr>
+      @for (col of visibleColumns(); track col.header) {
+        @if (col.sortable) {
+          <th [nzWidth]="col.width || null" [nzSortFn]="getSortFn(col.key)">
+            {{ col.header }}
+          </th>
+        } @else {
+          <th [nzWidth]="col.width || null">
+            {{ col.header }}
+          </th>
+        }
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (dataItem of dataTable.data; track dataItem) {
+      <tr (click)="onRowClick(dataItem)" style="cursor: pointer">
+        @for (col of visibleColumns(); track col.key) {
+          @let cellValue = getCellValue(dataItem, col.key);
+
+          <td
+            [style.background-color]="
+              col.isStatus && isBoolean(cellValue) ? (cellValue ? '#f6ffed' : '#fff1f0') : null
+            "
+            [style.font-weight]="col.isBold ? 'bold' : null"
+            [style.text-align]="col.align || 'left'"
+          >
+            @if (col.isStatus && isBoolean(cellValue)) {
+              <span [style.color]="cellValue ? '#52c41a' : '#ff4d4f'" style="font-weight: 500">
+                {{ cellValue ? 'CÓ' : 'KHÔNG' }}
+              </span>
+            } @else if (col.isScript) {
+              <nz-tag [nzColor]="getScriptColor(cellValue)" *ngIf="cellValue">
+                {{ formatScript(cellValue) }}
+              </nz-tag>
+            } @else {
+              {{ cellValue }}
+            }
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</nz-table>

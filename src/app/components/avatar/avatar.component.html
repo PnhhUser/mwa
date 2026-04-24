@@ -1,5 +1,5 @@
 <div class="avatar-wrapper">
-  @if (!isCollapsed) {
+  @if (!isCollapsed()) {
     <div class="avatar-wrapper__item">
       <nz-avatar
         nz-popover
@@ -15,7 +15,7 @@
     <button
       nz-button
       (click)="logout()"
-      [ngStyle]="isCollapsed ? { width: '63px', height: '38px' } : {}"
+      [ngStyle]="isCollapsed() ? { width: '63px', height: '38px' } : {}"
     >
       <nz-icon nzType="logout" nzTheme="outline" />
     </button>

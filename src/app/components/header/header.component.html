@@ -2,7 +2,7 @@
   <div class="header__left">
     <nz-icon
       (click)="onToggleNav()"
-      [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+      [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'"
       nzTheme="outline"
     />
     <div class="header__title">Manager Hub</div>
