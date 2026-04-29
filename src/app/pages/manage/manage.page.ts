@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { BreadcrumbComponent } from '../../components/breadcrumb/breadcrumb.component';
+import { JapaneseService } from '../../core/services/Japanese.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-manage',

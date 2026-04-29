@@ -29,11 +29,11 @@ export class AuthService {
   }
 
   login(dto: any): Observable<any> {
-    return this.http.post(`${this._API_URL}/login`, dto).pipe(
-      tap((res: any) => {
+    return this.http.post<ApiResponseModel<any>>(`${this._API_URL}/login`, dto).pipe(
+      tap((res: ApiResponseModel<any>) => {
         if (res.success) {
-          LocalHelper.set(this._FLAG_KEY, true);
-          this._isLoginIn = true;
+          LocalHelper.set(this._FLAG_KEY, res.success); // Lưu trạng thái đăng nhập vào localStorage
+          this._isLoginIn = res.success; // Cập nhật trạng thái đăng nhập trong service
           this.startRefreshTimer();
         }
       }),
@@ -48,9 +48,9 @@ export class AuthService {
       return of(false);
     }
 
-    return this.http.post(`${this._API_URL}/refresh-token`, {}).pipe(
-      tap((res: any) => {
-        this._isLoginIn = true;
+    return this.http.post<ApiResponseModel<any>>(`${this._API_URL}/refresh-token`, {}).pipe(
+      tap((res: ApiResponseModel<any>) => {
+        this._isLoginIn = res.success; // true nếu token hợp lệ, false nếu không
         this.startRefreshTimer();
       }),
       map(() => true),
@@ -64,11 +64,11 @@ export class AuthService {
   refreshToken(): Observable<any> {
     if (!this.isAuthenticated) return of(null);
 
-    return this.http.post(`${this._API_URL}/refresh-token`, {}).pipe(
-      tap(() => {
+    return this.http.post<ApiResponseModel<any>>(`${this._API_URL}/refresh-token`, {}).pipe(
+      tap((res: ApiResponseModel<any>) => {
         this.startRefreshTimer();
       }),
-      catchError((err) => {
+      catchError((err: ApiResponseModel<any>) => {
         this.logout();
         return of(err);
       }),

@@ -1,6 +1,6 @@
 <div class="product-overview">
   <div class="product-overview__stat">
-    @for (card of statCardList; track card) {
+    @for (card of statCardList(); track card.name) {
       <app-stat-card [card]="card" />
     }
   </div>

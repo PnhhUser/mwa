@@ -1,6 +1,21 @@
 <div class="card-detail">
   <div class="card-detail__content">
     <nz-list [nzBordered]="true">
+      <!-- SHOW -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Hiển thị:</span>
+        </span>
+
+        @if (isEdit()) {
+          <nz-switch [(ngModel)]="editCard.isShow" nzSize="small" />
+        } @else {
+          <nz-tag [nzColor]="formatColor(editCard.isShow)">
+            {{ editCard.isShow ? 'Có' : 'không' }}
+          </nz-tag>
+        }
+      </nz-list-item>
+
       <!-- TYPE -->
       <nz-list-item>
         <span nz-typography>
@@ -9,25 +24,25 @@
         </span>
 
         @if (isEdit()) {
-          <nz-select [ngModel]="editCard.type" style="width: 220px">
-            <nz-option nzValue="character" nzLabel="Ký tự"></nz-option>
-            <nz-option nzValue="vocabulary" nzLabel="Từ vựng"></nz-option>
+          <nz-select [(ngModel)]="editCard.type" style="width: 220px">
+            <nz-option [nzValue]="JapaneseType.CHARACTER" nzLabel="Ký tự"></nz-option>
+            <nz-option [nzValue]="JapaneseType.VOCABULARY" nzLabel="Từ vựng"></nz-option>
           </nz-select>
         }
       </nz-list-item>
 
-      <!-- SCRIPT -->
+      <!-- TYPEFACE -->
       <nz-list-item>
         <span nz-typography>
           <span class="title">Loại chữ:</span>
-          <span *ngIf="!isEdit()">{{ editCard.script }}</span>
+          <span *ngIf="!isEdit()">{{ formatScript(editCard.typeface) }}</span>
         </span>
 
         @if (isEdit()) {
-          <nz-select [ngModel]="editCard.script" style="width: 220px">
-            <nz-option nzValue="hiragana" nzLabel="Hiragana"></nz-option>
-            <nz-option nzValue="katakana" nzLabel="Katakana"></nz-option>
-            <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option>
+          <nz-select [(ngModel)]="editCard.typeface" style="width: 220px">
+            <nz-option [nzValue]="JapaneseTypeface.HIRAGANA" nzLabel="Hiragana"></nz-option>
+            <nz-option [nzValue]="JapaneseTypeface.KATAKANA" nzLabel="Katakana"></nz-option>
+            <!-- <nz-option [nzValue]="JapaneseTypeface.KANJI" nzLabel="Kanji"></nz-option> -->
           </nz-select>
         }
       </nz-list-item>
@@ -39,7 +54,12 @@
           <strong *ngIf="!isEdit()">{{ editCard.term }}</strong>
         </span>
         @if (isEdit()) {
-          <input nz-input [(ngModel)]="editCard.term" style="width: 220px" />
+          <input
+            nz-input
+            [(ngModel)]="editCard.term"
+            style="width: 220px"
+            (ngModelChange)="onTermChange($event)"
+          />
         } @else {
           <nz-icon nzType="sound" nzTheme="outline" (click)="onSound(editCard.term)" />
         }
@@ -53,7 +73,14 @@
         </span>
 
         @if (isEdit()) {
-          <input nz-input [(ngModel)]="editCard.reading" style="width: 220px" />
+          <input
+            nz-input
+            [(ngModel)]="editCard.reading"
+            style="width: 220px"
+            (ngModelChange)="onReadingChange($event)"
+          />
+        } @else {
+          <nz-icon nzType="sound" nzTheme="outline" (click)="onSound(editCard.reading)" />
         }
       </nz-list-item>
 
@@ -65,22 +92,38 @@
         </span>
 
         @if (isEdit()) {
-          <input nz-input [(ngModel)]="editCard.meaning" style="width: 220px" />
+          <input
+            nz-input
+            [(ngModel)]="editCard.meaning"
+            style="width: 220px"
+            placeholder="nghĩa phiên dịch"
+          />
         }
       </nz-list-item>
 
-      <!-- SHOW -->
+      <!-- ROMAJI -->
+
       <nz-list-item>
         <span nz-typography>
-          <span class="title">Hiển thị:</span>
+          <span class="title">Romaji:</span>
+          <span *ngIf="!isEdit()">{{ editCard.romaji }}</span>
         </span>
 
         @if (isEdit()) {
-          <nz-switch [(ngModel)]="editCard.show" nzSize="small" />
-        } @else {
-          <nz-tag [nzColor]="formatColor(editCard.show)">
-            {{ editCard.show ? 'Có' : 'không' }}
-          </nz-tag>
+          <input nz-input [(ngModel)]="editCard.romaji" style="width: 220px" />
+        }
+      </nz-list-item>
+
+      <!-- NOTE -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Ghi chú:</span>
+          <br />
+          <span *ngIf="!isEdit()">{{ editCard.note }}</span>
+        </span>
+
+        @if (isEdit()) {
+          <textarea nz-input [(ngModel)]="editCard.note" style="width: 220px" rows="4"></textarea>
         }
       </nz-list-item>
     </nz-list>

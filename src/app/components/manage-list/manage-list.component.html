@@ -1,5 +1,5 @@
 <div class="grid-temp-manage">
-  @for (card of cardManageList; track card.name) {
+  @for (card of cardManageList(); track card.name) {
     <app-manage-card [card]="card"></app-manage-card>
   }
 </div>

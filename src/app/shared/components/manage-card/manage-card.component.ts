@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ManageCard } from '../../../model/manage-card.model';
+import { ManageCard } from '../../../core/config/manage.config';
 
 @Component({
   selector: 'app-manage-card',

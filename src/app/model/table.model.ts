@@ -7,7 +7,8 @@ export interface TableColumnConfig<T> {
   sortable?: boolean;
   isSearch?: boolean;
   isStatus?: boolean;
-  isScript?: boolean;
+  isTypeface?: boolean;
+  isType?: boolean;
   isBold?: boolean;
   isHide?: boolean;
   align?: ColumnAlign;

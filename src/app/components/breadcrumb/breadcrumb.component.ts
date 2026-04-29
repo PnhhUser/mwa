@@ -5,8 +5,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { filter, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import StringHelper from '../../core/helpers/string.helper';
-import { MANAGE_MAP } from '../../core/config/manage.config';
+import { getManageLabel, getManageMap } from '../../core/config/manage.config';
 
 interface BreadcrumbItem {
   label: string;
@@ -72,7 +71,7 @@ export class BreadcrumbComponent implements OnInit {
       if (!label && Object.keys(params).length > 0) {
         const paramValue = Object.values(params)[0] as string;
 
-        label = MANAGE_MAP.find((x) => x.type === paramValue)?.name ?? '';
+        label = getManageLabel(paramValue);
       }
 
       if (label && nextUrl !== '/') {

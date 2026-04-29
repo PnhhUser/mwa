@@ -13,6 +13,7 @@
   [data]="filteredData()"
   [columns]="colConfig"
   (rowClick)="handleRowClick($event)"
+  [trackKey]="'id'"
 ></app-table>
 
 <ng-template #extraTpl>

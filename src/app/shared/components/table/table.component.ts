@@ -17,6 +17,13 @@ export class TableComponent<T> {
   config = input<TableConfig>({ pageSize: 8, pagination: true, bordered: true });
   rowClick = output<T>();
 
+  trackKey = input<keyof T | null>(null);
+
+  trackByFn = (index: number, item: T) => {
+    const key = this.trackKey();
+    return key ? (item as any)[key] : item;
+  };
+
   getCellValue(item: T, key: keyof T | string): any {
     return (item as any)[key];
   }
@@ -46,29 +53,51 @@ export class TableComponent<T> {
     };
   }
 
-  getScriptColor(script: string): string {
-    switch (script) {
-      case 'hiragana':
+  getTypefaceColor(typeface: number): string {
+    switch (typeface) {
+      case 1:
         return 'geekblue';
-      case 'katakana':
+      case 2:
         return 'purple';
-      case 'kanji':
+      case 3:
         return 'red';
       default:
         return 'blue';
     }
   }
 
-  formatScript(script: string): string {
-    switch (script) {
-      case 'hiragana':
+  formatTypeface(typeface: number): string {
+    switch (typeface) {
+      case 1:
         return 'Hiragana';
-      case 'katakana':
+      case 2:
         return 'Katakana';
-      case 'kanji':
+      case 3:
         return 'Kanji';
       default:
-        return script;
+        return typeface.toString();
+    }
+  }
+
+  formatType(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Ký tự';
+      case 2:
+        return 'Từ vựng';
+      default:
+        return type.toString();
+    }
+  }
+
+  getTypeColor(type: number): string {
+    switch (type) {
+      case 1:
+        return 'cyan';
+      case 2:
+        return 'magenta';
+      default:
+        return 'blue';
     }
   }
 

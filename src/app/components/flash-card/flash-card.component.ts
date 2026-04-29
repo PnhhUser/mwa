@@ -3,7 +3,6 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -11,11 +10,12 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TableColumnConfig } from '../../model/table.model';
 import { NzDrawerModule, NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
 import { CardDetailComponent } from '../card-detail/card-detail.component';
-import { FlashCard } from '../../model/flash-card.model';
 import { DrawerRemoveComponent } from '../../shared/components/drawer-remove/drawer-remove.component';
 import { DrawerCloseData } from '../../model/drawer.model';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { CardAddComponent } from '../card-add/card-add.component';
+import { JapaneseService } from '../../core/services/Japanese.service';
+import { JapaneseModel } from '../../model/japanese.model';
 
 @Component({
   selector: 'app-product-type',
@@ -36,81 +36,76 @@ import { CardAddComponent } from '../card-add/card-add.component';
 })
 export class FlashCardComponent {
   @ViewChild('extraTpl') extraTpl!: TemplateRef<any>;
-  searchText = signal<string>('');
-  private _drawerService = inject(NzDrawerService);
-  private _modalService = inject(NzModalService);
+  protected searchText = signal<string>('');
+  private readonly _drawerService = inject(NzDrawerService);
+  private readonly _modalService = inject(NzModalService);
 
   drawerRef!: NzDrawerRef<CardDetailComponent, any>;
 
-  cardData: FlashCard[] = [
-    {
-      id: 'a1',
-      type: 'character',
-      script: 'hiragana',
-      term: 'あ',
-      reading: 'a',
-      show: true,
-    },
+  private readonly _japaneseService = inject(JapaneseService);
 
-    {
-      id: 'k1',
-      type: 'character',
-      script: 'katakana',
-      term: 'ア',
-      reading: 'a',
-      show: true,
-    },
+  ngOnInit(): void {
+    this._japaneseService.load();
+  }
 
-    {
-      id: 'j1',
-      type: 'character',
-      script: 'kanji',
-      term: '日',
-      reading: 'nichi / hi',
-      meaning: 'ngày, mặt trời',
-      show: true,
-    },
+  ngOnChanges(): void {
+    this._japaneseService.load();
+  }
 
-    {
-      id: 'w1',
-      type: 'vocabulary',
-      script: 'hiragana',
-      term: 'ねこ',
-      reading: 'neko',
-      meaning: 'con mèo',
-      show: true,
-    },
-  ];
-
-  protected readonly colConfig: TableColumnConfig<FlashCard>[] = [
+  protected readonly colConfig: TableColumnConfig<JapaneseModel>[] = [
     {
       header: 'Hiển thị',
-      key: 'show',
+      key: 'isShow',
       width: '85px',
       isStatus: true,
       align: 'center',
     },
-    { header: 'Loại', key: 'script', isScript: true, width: '95px' },
+    {
+      header: 'Loại thẻ',
+      key: 'type',
+      isType: true,
+      width: '105px',
+      sortable: true,
+      align: 'center',
+    },
+    {
+      header: 'Loại chữ',
+      key: 'typeface',
+      isTypeface: true,
+      width: '105px',
+      sortable: true,
+      align: 'center',
+    },
     { header: 'Mục học', key: 'term', isBold: true },
-    { header: 'Nghĩa', key: 'meaning' },
     { header: '', key: 'reading', isHide: true, isSearch: true },
+    { header: '', key: 'romaji', isHide: true, isSearch: true },
   ];
 
-  private debouncedSearchTerm = toSignal(
+  private debouncedSearch = toSignal(
     toObservable(this.searchText).pipe(debounceTime(300), distinctUntilChanged()),
     { initialValue: '' },
   );
 
   filteredData = computed(() => {
-    const search = this.debouncedSearchTerm()?.toLowerCase().trim();
+    // 1. Lấy dữ liệu gốc từ service (mặc định là mảng rỗng nếu null)
+    const rawData = this._japaneseService.data() || [];
+    const search = this.debouncedSearch()?.toLowerCase().trim();
 
+    // 2. Thực hiện sắp xếp theo thời gian mới nhất (createdAt giảm dần)
+    // Dùng slice() để tạo bản sao mảng, tránh làm thay đổi trực tiếp mảng gốc trong signal của service
+    const sortedData = [...rawData].sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    // 3. Nếu không có từ khóa tìm kiếm, trả về danh sách đã sắp xếp
     if (!search) {
-      return this.cardData;
+      return sortedData;
     }
 
+    // 4. Nếu có search, tiến hành lọc trên danh sách đã sắp xếp
     const searchableKeys = this.colConfig.filter((col) => col.isSearch).map((col) => col.key);
 
-    return this.cardData.filter((item) =>
+    return sortedData.filter((item) =>
       searchableKeys.some((key) => {
         const value = String((item as any)[key]).toLowerCase();
         return value.includes(search);
@@ -118,7 +113,7 @@ export class FlashCardComponent {
     );
   });
 
-  handleRowClick(card: FlashCard): void {
+  protected handleRowClick(card: JapaneseModel): void {
     this.drawerRef = this._drawerService.create({
       nzWidth: 350,
       nzTitle: 'Chi tiết thẻ',
@@ -134,7 +129,7 @@ export class FlashCardComponent {
     });
 
     this.drawerRef.afterClose.subscribe({
-      next: (data: DrawerCloseData<FlashCard>) => {
+      next: (data: DrawerCloseData<JapaneseModel>) => {
         if (!data) {
           return;
         }
@@ -142,7 +137,7 @@ export class FlashCardComponent {
         const { type, closeData } = data;
 
         if (type === 'edit') {
-          console.log(type, closeData);
+          this.handleEditModel(closeData);
         }
 
         if (type === 'remove') {
@@ -152,14 +147,14 @@ export class FlashCardComponent {
     });
   }
 
-  handleRemove(): void {
+  protected handleRemove(): void {
     const card = this.drawerRef.getContentComponent()?.card;
 
     if (!card) {
       return;
     }
 
-    const data: DrawerCloseData<FlashCard> = {
+    const data: DrawerCloseData<JapaneseModel> = {
       type: 'remove',
       closeData: card,
     };
@@ -167,19 +162,21 @@ export class FlashCardComponent {
     this.drawerRef.close(data);
   }
 
-  handleRemoveModal(card: FlashCard): void {
+  protected handleRemoveModal(card: JapaneseModel): void {
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: `Bạn có muốn xóa phần tử ${card.term} này không?`,
-      nzOnOk: () => {},
+      nzOnOk: () => {
+        this._japaneseService.remove(card.id);
+      },
       nzOnCancel: () => {},
       nzOkText: 'Xác nhận',
       nzCancelText: 'Đóng',
     });
   }
 
-  handleAddDrawer(): void {
-    this._drawerService.create({
+  protected handleAddDrawer(): void {
+    const drawerAddRef = this._drawerService.create({
       nzTitle: 'Thêm thẻ',
       nzWidth: 350,
       nzContent: CardAddComponent,
@@ -187,6 +184,29 @@ export class FlashCardComponent {
         padding: 0,
       },
       nzClosable: false,
+    });
+
+    drawerAddRef.afterClose.subscribe({
+      next: (data) => {
+        if (!data) {
+          return;
+        }
+
+        this._japaneseService.add(data);
+      },
+    });
+  }
+
+  protected handleEditModel(card: JapaneseModel): void {
+    this._modalService.confirm({
+      nzClosable: false,
+      nzTitle: `Bạn có muốn chỉnh sửa phần tử ${card.term} này không?`,
+      nzOnOk: () => {
+        this._japaneseService.update(card);
+      },
+      nzOnCancel: () => {},
+      nzOkText: 'Xác nhận',
+      nzCancelText: 'Đóng',
     });
   }
 }

@@ -2,40 +2,41 @@
   <div class="card-detail__content">
     <form [formGroup]="addForm">
       <nz-list>
+        <!-- SHOW -->
+        <nz-list-item>
+          <span>Hiển thị</span>
+          <nz-switch formControlName="show" nzSize="small"></nz-switch>
+        </nz-list-item>
+
         <!-- TYPE -->
         <nz-list-item>
           <span>Loại thẻ</span>
           <nz-select formControlName="type">
-            <nz-option nzValue="character" nzLabel="Ký tự"></nz-option>
-            <nz-option nzValue="vocabulary" nzLabel="Từ vựng"></nz-option>
+            <nz-option [nzValue]="JapaneseType.CHARACTER" nzLabel="Ký tự"></nz-option>
+            <nz-option [nzValue]="JapaneseType.VOCABULARY" nzLabel="Từ vựng"></nz-option>
           </nz-select>
         </nz-list-item>
 
         <!-- SCRIPT -->
         <nz-list-item>
           <span>Loại chữ</span>
-          <nz-select formControlName="script">
-            <nz-option nzValue="hiragana" nzLabel="Hiragana"></nz-option>
-            <nz-option nzValue="katakana" nzLabel="Katakana"></nz-option>
-            <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option>
+          <nz-select formControlName="typeface">
+            <nz-option [nzValue]="JapaneseTypeface.HIRAGANA" nzLabel="Hiragana"></nz-option>
+            <nz-option [nzValue]="JapaneseTypeface.KATAKANA" nzLabel="Katakana"></nz-option>
+            <!-- <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option> -->
           </nz-select>
         </nz-list-item>
 
         <!-- TERM -->
         <nz-list-item>
           <span>Mục học</span>
-          <input nz-input type="text" formControlName="term" placeholder="neko -> ねこ" />
+          <input nz-input type="text" formControlName="term" />
         </nz-list-item>
 
         <!-- READING -->
         <nz-list-item>
           <span>Cách đọc</span>
-          <input
-            nz-input
-            type="text"
-            formControlName="reading"
-            placeholder="nhập romaji vd: neko"
-          />
+          <input nz-input type="text" formControlName="reading" />
         </nz-list-item>
 
         <!-- MEANING -->
@@ -44,10 +45,16 @@
           <input nz-input type="text" formControlName="meaning" placeholder="nghĩa phiên dịch" />
         </nz-list-item>
 
-        <!-- SHOW -->
+        <!-- ROMAJI -->
         <nz-list-item>
-          <span>Hiển thị</span>
-          <nz-switch formControlName="show" nzSize="small"></nz-switch>
+          <span>Romaji</span>
+          <input nz-input type="text" formControlName="romaji" placeholder="Nhập romaji" />
+        </nz-list-item>
+
+        <!-- NOTE -->
+        <nz-list-item>
+          <span>Ghi chú</span>
+          <textarea nz-input rows="4" formControlName="note"></textarea>
         </nz-list-item>
       </nz-list>
     </form>

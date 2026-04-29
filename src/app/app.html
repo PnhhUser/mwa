@@ -1,5 +1,5 @@
-@if (!loaderService.active()) {
-  <router-outlet />
-}
+<router-outlet />
 
-<app-loading />
+@if (loaderService.active()) {
+  <app-loading />
+}
