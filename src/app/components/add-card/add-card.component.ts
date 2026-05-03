@@ -12,7 +12,12 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { JapaneseTypeface, JapaneseType, JapaneseModel } from '../../model/japanese.model';
+import {
+  JapaneseTypeface,
+  JapaneseType,
+  JapaneseModel,
+  KanaType,
+} from '../../model/japanese.model';
 import { WanakanaService } from '../../core/services/wanakana.service';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
@@ -32,8 +37,8 @@ import { NzDrawerRef } from 'ng-zorro-antd/drawer';
     NzSwitchModule,
     CommonModule,
   ],
-  templateUrl: './card-add.component.html',
-  styleUrl: './card-add.component.less',
+  templateUrl: './add-card.component.html',
+  styleUrl: './add-card.component.less',
 })
 export class CardAddComponent {
   private readonly _fb = inject(FormBuilder);
@@ -42,10 +47,12 @@ export class CardAddComponent {
 
   protected readonly JapaneseType = JapaneseType;
   protected readonly JapaneseTypeface = JapaneseTypeface;
+  protected readonly kana = KanaType;
 
   protected addForm = this._fb.nonNullable.group({
-    type: [JapaneseType.CHARACTER],
+    type: [JapaneseType.VOCABULARY],
     typeface: [JapaneseTypeface.HIRAGANA],
+    kanaType: [this.kana.default],
     term: ['', [Validators.required]],
     reading: ['', [Validators.required]],
     meaning: [''],

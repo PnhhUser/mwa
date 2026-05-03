@@ -9,13 +9,14 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TableColumnConfig } from '../../model/table.model';
 import { NzDrawerModule, NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
-import { CardDetailComponent } from '../card-detail/card-detail.component';
+import { CardDetailComponent } from '../detail-card/detail-card.component';
 import { DrawerRemoveComponent } from '../../shared/components/drawer-remove/drawer-remove.component';
 import { DrawerCloseData } from '../../model/drawer.model';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { CardAddComponent } from '../card-add/card-add.component';
+import { CardAddComponent } from '../add-card/add-card.component';
 import { JapaneseService } from '../../core/services/Japanese.service';
 import { JapaneseModel } from '../../model/japanese.model';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-product-type',
@@ -39,6 +40,7 @@ export class FlashCardComponent {
   protected searchText = signal<string>('');
   private readonly _drawerService = inject(NzDrawerService);
   private readonly _modalService = inject(NzModalService);
+  private readonly _alertService = inject(AlertService);
 
   drawerRef!: NzDrawerRef<CardDetailComponent, any>;
 
@@ -69,9 +71,9 @@ export class FlashCardComponent {
       align: 'center',
     },
     {
-      header: 'Loại chữ',
-      key: 'typeface',
-      isTypeface: true,
+      header: 'kana',
+      key: 'kanaType',
+      isKana: true,
       width: '105px',
       sortable: true,
       align: 'center',
@@ -87,22 +89,18 @@ export class FlashCardComponent {
   );
 
   filteredData = computed(() => {
-    // 1. Lấy dữ liệu gốc từ service (mặc định là mảng rỗng nếu null)
     const rawData = this._japaneseService.data() || [];
+
     const search = this.debouncedSearch()?.toLowerCase().trim();
 
-    // 2. Thực hiện sắp xếp theo thời gian mới nhất (createdAt giảm dần)
-    // Dùng slice() để tạo bản sao mảng, tránh làm thay đổi trực tiếp mảng gốc trong signal của service
     const sortedData = [...rawData].sort((a, b) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
-    // 3. Nếu không có từ khóa tìm kiếm, trả về danh sách đã sắp xếp
     if (!search) {
       return sortedData;
     }
 
-    // 4. Nếu có search, tiến hành lọc trên danh sách đã sắp xếp
     const searchableKeys = this.colConfig.filter((col) => col.isSearch).map((col) => col.key);
 
     return sortedData.filter((item) =>
@@ -193,6 +191,7 @@ export class FlashCardComponent {
         }
 
         this._japaneseService.add(data);
+        this._alertService.show('', 'Thêm thẻ thành công', 'success');
       },
     });
   }
@@ -203,6 +202,7 @@ export class FlashCardComponent {
       nzTitle: `Bạn có muốn chỉnh sửa phần tử ${card.term} này không?`,
       nzOnOk: () => {
         this._japaneseService.update(card);
+        this._alertService.show('', 'Sửa thẻ thành công', 'success');
       },
       nzOnCancel: () => {},
       nzOkText: 'Xác nhận',

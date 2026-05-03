@@ -47,6 +47,25 @@
         }
       </nz-list-item>
 
+      <!-- KANA -->
+      <nz-list-item>
+        <span nz-typography>
+          <span class="title">Kana:</span>
+          <span *ngIf="!isEdit()">{{ formatKana(editCard.kanaType) }}</span>
+        </span>
+
+        @if (isEdit()) {
+          <nz-select [(ngModel)]="editCard.kanaType" style="width: 220px">
+            <nz-option [nzValue]="kana.Seion" nzLabel="Seion"></nz-option>
+            <nz-option [nzValue]="kana.Dakuon" nzLabel="Dakuon"></nz-option>
+            <nz-option [nzValue]="kana.Handakuon" nzLabel="Handakuon"></nz-option>
+            <nz-option [nzValue]="kana.SmallKana" nzLabel="SmallKana"></nz-option>
+            <nz-option [nzValue]="kana.Sokuon" nzLabel="Sokuon"></nz-option>
+            <nz-option [nzValue]="kana.Yoon" nzLabel="Yoon"></nz-option>
+          </nz-select>
+        }
+      </nz-list-item>
+
       <!-- TERM -->
       <nz-list-item>
         <span nz-typography>

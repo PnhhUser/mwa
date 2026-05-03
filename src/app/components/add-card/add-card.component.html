@@ -12,8 +12,8 @@
         <nz-list-item>
           <span>Loại thẻ</span>
           <nz-select formControlName="type">
-            <nz-option [nzValue]="JapaneseType.CHARACTER" nzLabel="Ký tự"></nz-option>
             <nz-option [nzValue]="JapaneseType.VOCABULARY" nzLabel="Từ vựng"></nz-option>
+            <nz-option [nzValue]="JapaneseType.CHARACTER" nzLabel="Ký tự"></nz-option>
           </nz-select>
         </nz-list-item>
 
@@ -24,6 +24,21 @@
             <nz-option [nzValue]="JapaneseTypeface.HIRAGANA" nzLabel="Hiragana"></nz-option>
             <nz-option [nzValue]="JapaneseTypeface.KATAKANA" nzLabel="Katakana"></nz-option>
             <!-- <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option> -->
+          </nz-select>
+        </nz-list-item>
+
+        <!-- KANA -->
+        <nz-list-item>
+          <span>Kana</span>
+
+          <nz-select formControlName="kanaType">
+            <nz-option [nzValue]="kana.default" nzLabel="Mặc định"></nz-option>
+            <nz-option [nzValue]="kana.Seion" nzLabel="Seion"></nz-option>
+            <nz-option [nzValue]="kana.Dakuon" nzLabel="Dakuon"></nz-option>
+            <nz-option [nzValue]="kana.Handakuon" nzLabel="Handakuon"></nz-option>
+            <nz-option [nzValue]="kana.SmallKana" nzLabel="SmallKana"></nz-option>
+            <nz-option [nzValue]="kana.Sokuon" nzLabel="Sokuon"></nz-option>
+            <nz-option [nzValue]="kana.Yoon" nzLabel="Yoon"></nz-option>
           </nz-select>
         </nz-list-item>
 

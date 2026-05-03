@@ -22,7 +22,7 @@ export class ProductOverviewComponent {
   private readonly statConfigs: StatConfig[] = JapaneseStatConfig;
 
   statCardList = computed<StatCard[]>(() => {
-    const data = this._japaneseService.data();
+    const data = this._japaneseService.data().filter((x) => x.isShow);
 
     return this.statConfigs.map((config) => ({
       name: config.name,

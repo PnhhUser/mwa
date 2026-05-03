@@ -47,6 +47,10 @@
               <nz-tag [nzColor]="getTypeColor(cellValue)" *ngIf="cellValue">
                 {{ formatType(cellValue) }}
               </nz-tag>
+            } @else if (col.isKana && cellValue) {
+              <nz-tag [nzColor]="getKanaColor(cellValue)" *ngIf="cellValue">
+                {{ formatKana(cellValue) }}
+              </nz-tag>
             } @else {
               {{ cellValue }}
             }

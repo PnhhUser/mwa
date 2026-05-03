@@ -9,6 +9,7 @@ export interface TableColumnConfig<T> {
   isStatus?: boolean;
   isTypeface?: boolean;
   isType?: boolean;
+  isKana?: boolean;
   isBold?: boolean;
   isHide?: boolean;
   align?: ColumnAlign;

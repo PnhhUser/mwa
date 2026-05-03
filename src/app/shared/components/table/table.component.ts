@@ -3,6 +3,7 @@ import { Component, input, output } from '@angular/core';
 import { NzTableModule, NzTableSortFn } from 'ng-zorro-antd/table';
 import { TableColumnConfig, TableConfig } from '../../../model/table.model';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { KanaType } from '../../../model/japanese.model';
 
 @Component({
   selector: 'app-table',
@@ -98,6 +99,44 @@ export class TableComponent<T> {
         return 'magenta';
       default:
         return 'blue';
+    }
+  }
+
+  formatKana(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Dakaon';
+      case 2:
+        return 'Handakuon';
+      case 3:
+        return 'Yoon';
+      case 4:
+        return 'Sokuon';
+      case 5:
+        return 'Smallkana';
+      case 6:
+        return 'Seion';
+      default:
+        return '';
+    }
+  }
+
+  getKanaColor(type: number): string {
+    switch (type) {
+      case KanaType.Seion: // 6
+        return 'geekblue'; // Xanh tím (của NZ)
+      case KanaType.Dakuon: // 1
+        return 'volcano'; // Đỏ cam nhẹ (gần với đỏ phấn)
+      case KanaType.Handakuon: // 2
+        return 'orange'; // Cam
+      case KanaType.Yoon: // 3
+        return 'cyan'; // Xanh dương nhạt
+      case KanaType.Sokuon: // 4
+        return 'purple'; // Tím
+      case KanaType.SmallKana: // 5
+        return 'green'; // Xanh lá mint nhẹ
+      default:
+        return 'default'; // Xám
     }
   }
 

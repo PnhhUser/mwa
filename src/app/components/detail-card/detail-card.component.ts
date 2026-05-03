@@ -27,6 +27,7 @@ import {
   JapaneseModel,
   JapaneseType,
   JapaneseTypeface,
+  KanaType,
 } from '../../model/japanese.model';
 import { WanakanaService } from '../../core/services/wanakana.service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
@@ -48,8 +49,8 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
     CommonModule,
     NzTagModule,
   ],
-  templateUrl: './card-detail.component.html',
-  styleUrl: './card-detail.component.less',
+  templateUrl: './detail-card.component.html',
+  styleUrl: './detail-card.component.less',
 })
 export class CardDetailComponent {
   @Input() card!: JapaneseModel;
@@ -61,6 +62,7 @@ export class CardDetailComponent {
   protected isEdit = signal<boolean>(false);
   protected readonly JapaneseType = JapaneseType;
   protected readonly JapaneseTypeface = JapaneseTypeface;
+  protected readonly kana = KanaType;
   private _cdr = inject(ChangeDetectorRef);
 
   editCard!: JapaneseModel;
@@ -107,6 +109,25 @@ export class CardDetailComponent {
       //   return 'Kanji';
       default:
         return 'unknown';
+    }
+  }
+
+  formatKana(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Dakaon';
+      case 2:
+        return 'Handakuon';
+      case 3:
+        return 'Yoon';
+      case 4:
+        return 'Sokuon';
+      case 5:
+        return 'Smallkana';
+      case 6:
+        return 'Seion';
+      default:
+        return '';
     }
   }
 
