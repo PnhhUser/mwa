@@ -40,7 +40,6 @@ export class FlashCardComponent {
   protected searchText = signal<string>('');
   private readonly _drawerService = inject(NzDrawerService);
   private readonly _modalService = inject(NzModalService);
-  private readonly _alertService = inject(AlertService);
 
   drawerRef!: NzDrawerRef<CardDetailComponent, any>;
 
@@ -58,9 +57,10 @@ export class FlashCardComponent {
     {
       header: 'Hiển thị',
       key: 'isShow',
-      width: '85px',
+      width: '105px',
       isStatus: true,
       align: 'center',
+      sortable: true,
     },
     {
       header: 'Loại thẻ',
@@ -71,9 +71,9 @@ export class FlashCardComponent {
       align: 'center',
     },
     {
-      header: 'kana',
-      key: 'kanaType',
-      isKana: true,
+      header: 'Loại chữ',
+      key: 'typeface',
+      isTypeface: true,
       width: '105px',
       sortable: true,
       align: 'center',
@@ -191,7 +191,6 @@ export class FlashCardComponent {
         }
 
         this._japaneseService.add(data);
-        this._alertService.show('', 'Thêm thẻ thành công', 'success');
       },
     });
   }
@@ -202,7 +201,6 @@ export class FlashCardComponent {
       nzTitle: `Bạn có muốn chỉnh sửa phần tử ${card.term} này không?`,
       nzOnOk: () => {
         this._japaneseService.update(card);
-        this._alertService.show('', 'Sửa thẻ thành công', 'success');
       },
       nzOnCancel: () => {},
       nzOkText: 'Xác nhận',

@@ -47,6 +47,8 @@ export class JapaneseService {
         this._data.update((list) =>
           list.map((item) => (item.id === japanese.id ? { ...japanese } : item)),
         );
+
+        this._alertService.show('', 'Sửa thẻ thành công', 'success');
       },
       error: (err) => {
         console.error(err);
@@ -63,6 +65,7 @@ export class JapaneseService {
       next: (res) => {
         if (res.success && res.data) {
           this._data.update((list) => [...list, res.data as JapaneseModel]);
+          this._alertService.show('', 'Thêm thẻ thành công', 'success');
         } else {
           this._alertService.show('', res.message, 'warning');
         }

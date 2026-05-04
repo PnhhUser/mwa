@@ -105,7 +105,7 @@ export class TableComponent<T> {
   formatKana(type: number): string {
     switch (type) {
       case 1:
-        return 'Dakaon';
+        return 'Dakuon';
       case 2:
         return 'Handakuon';
       case 3:

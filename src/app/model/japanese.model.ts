@@ -31,7 +31,7 @@ export enum KanaType {
   Yoon = 3, // 拗音 - âm ghép (きゃ)
   Sokuon = 4, // 促音 - っ
   SmallKana = 5, // ゃ, ゅ, ょ
-  default = 0,
+  Default = 0,
 }
 
 export const CARD_TYPE_LABEL: Record<JapaneseType, string> = {

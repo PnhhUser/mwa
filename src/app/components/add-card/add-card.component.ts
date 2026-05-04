@@ -52,7 +52,7 @@ export class CardAddComponent {
   protected addForm = this._fb.nonNullable.group({
     type: [JapaneseType.VOCABULARY],
     typeface: [JapaneseTypeface.HIRAGANA],
-    kanaType: [this.kana.default],
+    kanaType: [this.kana.Default],
     term: ['', [Validators.required]],
     reading: ['', [Validators.required]],
     meaning: [''],

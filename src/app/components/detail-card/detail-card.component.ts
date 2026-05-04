@@ -72,6 +72,8 @@ export class CardDetailComponent {
   private readingSubject = new Subject<string>();
 
   ngOnInit(): void {
+    this.card = { ...this.card, kanaType: Number(this.card.kanaType ?? 0) };
+
     this.editCard = { ...this.card };
 
     this.termSubject
@@ -127,7 +129,7 @@ export class CardDetailComponent {
       case 6:
         return 'Seion';
       default:
-        return '';
+        return 'Mặc định';
     }
   }
 
