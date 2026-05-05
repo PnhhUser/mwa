@@ -11,7 +11,7 @@
           <nz-switch [(ngModel)]="editCard.isShow" nzSize="small" />
         } @else {
           <nz-tag [nzColor]="formatColor(editCard.isShow)">
-            {{ editCard.isShow ? 'Có' : 'không' }}
+            {{ editCard.isShow ? 'Có' : 'Không' }}
           </nz-tag>
         }
       </nz-list-item>
@@ -20,7 +20,9 @@
       <nz-list-item>
         <span nz-typography>
           <span class="title">Loại thẻ:</span>
-          <span *ngIf="!isEdit()"> {{ formatCardType(editCard.type) }}</span>
+          @if (!isEdit()) {
+            <span> {{ formatCardType(editCard.type) }}</span>
+          }
         </span>
 
         @if (isEdit()) {
@@ -35,14 +37,20 @@
       <nz-list-item>
         <span nz-typography>
           <span class="title">Loại chữ:</span>
-          <span *ngIf="!isEdit()">{{ formatScript(editCard.typeface) }}</span>
+          @if (!isEdit()) {
+            <span>{{ formatScript(editCard.typeface) }}</span>
+          }
         </span>
 
         @if (isEdit()) {
-          <nz-select [(ngModel)]="editCard.typeface" style="width: 220px">
+          <nz-select
+            [(ngModel)]="editCard.typeface"
+            (ngModelChange)="onTypefaceChange($event)"
+            style="width: 220px"
+          >
             <nz-option [nzValue]="JapaneseTypeface.HIRAGANA" nzLabel="Hiragana"></nz-option>
             <nz-option [nzValue]="JapaneseTypeface.KATAKANA" nzLabel="Katakana"></nz-option>
-            <!-- <nz-option [nzValue]="JapaneseTypeface.KANJI" nzLabel="Kanji"></nz-option> -->
+            <nz-option [nzValue]="JapaneseTypeface.KANJI" nzLabel="Kanji"></nz-option>
           </nz-select>
         }
       </nz-list-item>
@@ -51,7 +59,9 @@
       <nz-list-item>
         <span nz-typography>
           <span class="title">Kana:</span>
-          <span *ngIf="!isEdit()">{{ formatKana(editCard.kanaType) }}</span>
+          @if (!isEdit()) {
+            <span>{{ formatKana(editCard.kanaType) }}</span>
+          }
         </span>
 
         @if (isEdit()) {
@@ -67,48 +77,63 @@
         }
       </nz-list-item>
 
-      <!-- TERM -->
+      <!-- TERM - Dùng JpInputComponent khi edit -->
       <nz-list-item>
         <span nz-typography>
           <span class="title">Mục học:</span>
-          <strong *ngIf="!isEdit()">{{ editCard.term }}</strong>
+          @if (!isEdit()) {
+            <strong>{{ editCard.term }}</strong>
+          }
         </span>
+
         @if (isEdit()) {
-          <input
-            nz-input
-            [(ngModel)]="editCard.term"
-            style="width: 220px"
-            (ngModelChange)="onTermChange($event)"
-          />
+          <div class="jp-input-wrapper">
+            <app-jp-input
+              [inputType]="
+                currentTypeface() === JapaneseTypeface.KANJI
+                  ? 'kanji'
+                  : currentTypeface() === JapaneseTypeface.KATAKANA
+                    ? 'katakana'
+                    : 'hiragana'
+              "
+              [placeholderText]="'Nhập từ...'"
+              (valueConverted)="onTermChange($event)"
+            />
+          </div>
         } @else {
           <nz-icon nzType="sound" nzTheme="outline" (click)="onSound(editCard.term)" />
         }
       </nz-list-item>
 
-      <!-- READING -->
+      <!-- READING - Dùng JpInputComponent khi edit -->
       <nz-list-item>
         <span nz-typography>
           <span class="title">Cách đọc:</span>
-          <em *ngIf="!isEdit()">{{ editCard.reading }}</em>
+          @if (!isEdit()) {
+            <em>{{ editCard.reading }}</em>
+          }
         </span>
 
         @if (isEdit()) {
-          <input
-            nz-input
-            [(ngModel)]="editCard.reading"
-            style="width: 220px"
-            (ngModelChange)="onReadingChange($event)"
-          />
+          <div class="jp-input-wrapper">
+            <app-jp-input
+              inputType="hiragana"
+              [placeholderText]="'Nhập cách đọc (romaji)...'"
+              (valueConverted)="onReadingChange($event)"
+            />
+          </div>
         } @else {
           <nz-icon nzType="sound" nzTheme="outline" (click)="onSound(editCard.reading)" />
         }
       </nz-list-item>
 
-      <!-- MEANING  -->
+      <!-- MEANING -->
       <nz-list-item>
         <span nz-typography>
           <span class="title">Nghĩa:</span>
-          <span *ngIf="!isEdit()">{{ editCard.meaning }}</span>
+          @if (!isEdit()) {
+            <span>{{ editCard.meaning }}</span>
+          }
         </span>
 
         @if (isEdit()) {
@@ -122,15 +147,21 @@
       </nz-list-item>
 
       <!-- ROMAJI -->
-
       <nz-list-item>
         <span nz-typography>
           <span class="title">Romaji:</span>
-          <span *ngIf="!isEdit()">{{ editCard.romaji }}</span>
+          @if (!isEdit()) {
+            <span>{{ editCard.romaji }}</span>
+          }
         </span>
 
         @if (isEdit()) {
-          <input nz-input [(ngModel)]="editCard.romaji" style="width: 220px" />
+          <input
+            nz-input
+            [(ngModel)]="editCard.romaji"
+            style="width: 220px"
+            placeholder="Nhập romaji (ví dụ: Nihon, Watashi)..."
+          />
         }
       </nz-list-item>
 
@@ -138,8 +169,10 @@
       <nz-list-item>
         <span nz-typography>
           <span class="title">Ghi chú:</span>
-          <br />
-          <span *ngIf="!isEdit()">{{ editCard.note }}</span>
+          @if (!isEdit()) {
+            <br />
+            <span>{{ editCard.note }}</span>
+          }
         </span>
 
         @if (isEdit()) {
@@ -148,6 +181,7 @@
       </nz-list-item>
     </nz-list>
   </div>
+
   <div class="card-detail__actions">
     @if (isEdit()) {
       <button nz-button nzType="primary" (click)="onConfirm()">Xác nhận</button>

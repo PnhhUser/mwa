@@ -23,14 +23,13 @@
           <nz-select formControlName="typeface">
             <nz-option [nzValue]="JapaneseTypeface.HIRAGANA" nzLabel="Hiragana"></nz-option>
             <nz-option [nzValue]="JapaneseTypeface.KATAKANA" nzLabel="Katakana"></nz-option>
-            <!-- <nz-option nzValue="kanji" nzLabel="Kanji"></nz-option> -->
+            <nz-option [nzValue]="JapaneseTypeface.KANJI" nzLabel="Kanji"></nz-option>
           </nz-select>
         </nz-list-item>
 
         <!-- KANA -->
         <nz-list-item>
           <span>Kana</span>
-
           <nz-select formControlName="kanaType">
             <nz-option [nzValue]="kana.Default" nzLabel="Mặc định"></nz-option>
             <nz-option [nzValue]="kana.Seion" nzLabel="Seion"></nz-option>
@@ -42,16 +41,32 @@
           </nz-select>
         </nz-list-item>
 
-        <!-- TERM -->
+        <!-- TERM - Dùng JpInputComponent với dynamic type -->
         <nz-list-item>
           <span>Mục học</span>
-          <input nz-input type="text" formControlName="term" />
+          <app-jp-input
+            [inputType]="
+              currentTypeface() === JapaneseTypeface.KANJI
+                ? 'kanji'
+                : currentTypeface() === JapaneseTypeface.KATAKANA
+                  ? 'katakana'
+                  : 'hiragana'
+            "
+            [placeholderText]="'Nhập từ...'"
+            (valueConverted)="onTermChange($event)"
+          >
+          </app-jp-input>
         </nz-list-item>
 
-        <!-- READING -->
+        <!-- READING - Dùng JpInputComponent, luôn là Hiragana -->
         <nz-list-item>
           <span>Cách đọc</span>
-          <input nz-input type="text" formControlName="reading" />
+          <app-jp-input
+            inputType="hiragana"
+            placeholderText="Nhập cách đọc (romaji)..."
+            (valueConverted)="onReadingChange($event)"
+          >
+          </app-jp-input>
         </nz-list-item>
 
         <!-- MEANING -->
@@ -60,10 +75,15 @@
           <input nz-input type="text" formControlName="meaning" placeholder="nghĩa phiên dịch" />
         </nz-list-item>
 
-        <!-- ROMAJI -->
+        <!-- ROMAJI - để user nhập romaji nếu cần -->
         <nz-list-item>
           <span>Romaji</span>
-          <input nz-input type="text" formControlName="romaji" placeholder="Nhập romaji" />
+          <input
+            nz-input
+            type="text"
+            formControlName="romaji"
+            placeholder="Nhập romaji (ví dụ: Nihon, Watashi)..."
+          />
         </nz-list-item>
 
         <!-- NOTE -->

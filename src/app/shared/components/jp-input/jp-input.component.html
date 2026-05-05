@@ -1,0 +1,31 @@
+<div class="jp-input-wrapper">
+  <input
+    #nativeInput
+    nz-input
+    type="text"
+    [placeholder]="placeholderText()"
+    [(ngModel)]="rawInputValue"
+    (ngModelChange)="onValueChange($event)"
+    (keydown)="onKeyDown($event)"
+    (blur)="onBlur()"
+    [class.has-suggestions]="showSuggestions"
+  />
+
+  <!-- Dropdown gợi ý cho Kanji mode -->
+  <div class="suggestions-dropdown" *ngIf="showSuggestions && inputType() === 'kanji'">
+    <div
+      *ngFor="let sugg of suggestions.slice(0, 10); let i = index"
+      [class.selected]="i === selectedSuggestionIndex"
+      (click)="selectSuggestion(sugg)"
+      (mouseenter)="selectedSuggestionIndex = i"
+    >
+      {{ sugg }}
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="inputType() === 'kanji' && !dictionaryService.isLoaded">
+    <span class="loading-spinner"></span>
+    <span>{{ dictionaryService.loadingProgress }}%</span>
+  </div>
+</div>

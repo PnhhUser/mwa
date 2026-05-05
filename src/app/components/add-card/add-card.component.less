@@ -6,15 +6,45 @@
   &__content {
     width: 100%;
     height: calc(100% - 60px);
+    overflow-y: auto;
+    padding-bottom: 20px;
 
-    input,
     nz-select,
     textarea {
       width: 250px;
     }
 
+    app-jp-input {
+      width: 250px;
+      display: inline-block;
+    }
+
     nz-list-item {
       padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      > span:first-child {
+        min-width: 100px;
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        > span:first-child {
+          margin-bottom: 8px;
+        }
+
+        nz-select,
+        textarea,
+        app-jp-input,
+        input {
+          width: 100%;
+        }
+      }
     }
   }
 
@@ -25,9 +55,17 @@
     bottom: 0;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
     border-top: 1px solid #eeeeee;
     padding: 12px;
+    background: white;
+    z-index: 10;
   }
+}
+
+input,
+nz-select,
+textarea {
+  width: 250px;
 }

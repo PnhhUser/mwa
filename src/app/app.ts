@@ -5,6 +5,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 import { LoaderService } from './core/services/loader.service';
 import ROUTES_PATH from './core/consts/route.const';
+import { DictionaryService } from './core/services/Dictionary.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class App {
   private authService = inject(AuthService);
   private router = inject(Router);
   readonly loaderService = inject(LoaderService);
+
+  // constructor(private dictionaryService: DictionaryService) {}
 
   ngOnInit() {
     this.authService.checkAuthStatus().subscribe({

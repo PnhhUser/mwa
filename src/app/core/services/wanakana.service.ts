@@ -12,4 +12,9 @@ export class WanakanaService {
   romajiToKatakana(text: string): string {
     return wanakana.toKatakana(text);
   }
+
+  convertToSearchBase(text: string): string {
+    if (!text) return '';
+    return wanakana.toHiragana(text.trim().toLowerCase());
+  }
 }

@@ -21,7 +21,7 @@ export enum JapaneseType {
 export enum JapaneseTypeface {
   HIRAGANA = 1,
   KATAKANA = 2,
-  // KANJI = 3,
+  KANJI = 3,
 }
 
 export enum KanaType {

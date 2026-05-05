@@ -4,24 +4,49 @@
   position: relative;
 
   &__content {
-    // padding: 12px 0 0 0;
     width: 100%;
     height: calc(100% - 60px);
+    overflow-y: auto;
 
     .title {
       font-size: 13px;
       margin-right: 8px;
+      min-width: 80px;
+      display: inline-block;
     }
 
     nz-icon {
       cursor: pointer;
       color: #bbbbbb;
       transition: all 0.2s ease;
+      margin-left: 8px;
     }
 
     nz-icon:hover {
       transform: scale(1.2);
       color: var(--color-primary);
+    }
+
+    // Style cho wrapper của JpInputComponent
+    .jp-input-wrapper {
+      width: 220px;
+      display: inline-block;
+
+      app-jp-input {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    nz-list-item {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      > span:first-child {
+        min-width: 100px;
+      }
     }
   }
 
@@ -32,9 +57,11 @@
     bottom: 0;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
     border-top: 1px solid #eeeeee;
     padding: 12px;
+    background: white;
+    z-index: 10;
   }
 }

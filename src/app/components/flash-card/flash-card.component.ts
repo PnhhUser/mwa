@@ -16,7 +16,6 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { CardAddComponent } from '../add-card/add-card.component';
 import { JapaneseService } from '../../core/services/Japanese.service';
 import { JapaneseModel } from '../../model/japanese.model';
-import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-product-type',
@@ -51,6 +50,10 @@ export class FlashCardComponent {
 
   ngOnChanges(): void {
     this._japaneseService.load();
+  }
+
+  onChange(s: string) {
+    console.log(s);
   }
 
   protected readonly colConfig: TableColumnConfig<JapaneseModel>[] = [

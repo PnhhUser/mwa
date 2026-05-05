@@ -2,11 +2,10 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   Input,
-  Output,
   signal,
+  OnInit,
 } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -30,8 +29,8 @@ import {
   KanaType,
 } from '../../model/japanese.model';
 import { WanakanaService } from '../../core/services/wanakana.service';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { JpInputComponent } from '../../shared/components/jp-input/jp-input.component';
+import { DictionaryService } from '../../core/services/Dictionary.service';
 
 @Component({
   selector: 'app-card-detail.component',
@@ -48,49 +47,60 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
     NzSelectModule,
     CommonModule,
     NzTagModule,
+    JpInputComponent,
   ],
   templateUrl: './detail-card.component.html',
   styleUrl: './detail-card.component.less',
 })
-export class CardDetailComponent {
+export class CardDetailComponent implements OnInit {
   @Input() card!: JapaneseModel;
+
   private _speechService = inject(SpeechService);
   private _drawerRef = inject(NzDrawerRef);
   private _wanakanaService = inject(WanakanaService);
-  private _destroyRef = inject(DestroyRef);
+  public dictionaryService = inject(DictionaryService);
+  private _cdr = inject(ChangeDetectorRef);
 
   protected isEdit = signal<boolean>(false);
   protected readonly JapaneseType = JapaneseType;
   protected readonly JapaneseTypeface = JapaneseTypeface;
   protected readonly kana = KanaType;
-  private _cdr = inject(ChangeDetectorRef);
 
   editCard!: JapaneseModel;
-
-  // Debouncer subjects
-  private termSubject = new Subject<string>();
-  private readingSubject = new Subject<string>();
+  currentTypeface = signal<JapaneseTypeface>(JapaneseTypeface.HIRAGANA);
 
   ngOnInit(): void {
+    // Clone card data
     this.card = { ...this.card, kanaType: Number(this.card.kanaType ?? 0) };
-
     this.editCard = { ...this.card };
+    this.currentTypeface.set(this.editCard.typeface);
+  }
 
-    this.termSubject
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this._destroyRef))
-      .subscribe((value) => {
-        this.applyTermConversion(value);
-      });
+  /**
+   * Xử lý khi term thay đổi từ JpInputComponent
+   */
+  onTermChange(value: string) {
+    this.editCard.term = value;
+  }
 
-    this.readingSubject
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this._destroyRef))
-      .subscribe((value) => {
-        this.applyReadingConversion(value);
-      });
+  /**
+   * Xử lý khi reading thay đổi từ JpInputComponent
+   */
+  onReadingChange(value: string) {
+    this.editCard.reading = value;
+  }
+
+  /**
+   * Khi typeface thay đổi, cập nhật signal
+   */
+  onTypefaceChange(value: JapaneseTypeface) {
+    this.editCard.typeface = value;
+    this.currentTypeface.set(value);
   }
 
   onEdit(): void {
     this.isEdit.set(true);
+    this.currentTypeface.set(this.editCard.typeface);
   }
 
   onSound(text: string): void {
@@ -103,12 +113,12 @@ export class CardDetailComponent {
 
   formatScript(typeface: JapaneseTypeface): string {
     switch (typeface) {
-      case 1:
+      case JapaneseTypeface.HIRAGANA:
         return 'Hiragana';
-      case 2:
+      case JapaneseTypeface.KATAKANA:
         return 'Katakana';
-      // case 3:
-      //   return 'Kanji';
+      case JapaneseTypeface.KANJI:
+        return 'Kanji';
       default:
         return 'unknown';
     }
@@ -117,7 +127,7 @@ export class CardDetailComponent {
   formatKana(type: number): string {
     switch (type) {
       case 1:
-        return 'Dakaon';
+        return 'Dakuon';
       case 2:
         return 'Handakuon';
       case 3:
@@ -125,7 +135,7 @@ export class CardDetailComponent {
       case 4:
         return 'Sokuon';
       case 5:
-        return 'Smallkana';
+        return 'SmallKana';
       case 6:
         return 'Seion';
       default:
@@ -135,66 +145,19 @@ export class CardDetailComponent {
 
   onConfirm(): void {
     this.card = { ...this.editCard };
-
     this.isEdit.set(false);
 
     const data: DrawerCloseData<JapaneseModel> = { type: 'edit', closeData: this.card };
-
     this._drawerRef.close(data);
   }
 
   onCancel(): void {
     this.isEdit.set(false);
     this.editCard = { ...this.card };
+    this.currentTypeface.set(this.editCard.typeface);
   }
 
   formatColor(show: boolean): string {
     return show ? 'green' : 'red';
-  }
-
-  onTermChange(value: string): void {
-    this.editCard.term = value;
-    this.termSubject.next(value);
-  }
-
-  onReadingChange(value: string): void {
-    this.editCard.reading = value;
-    this.readingSubject.next(value);
-  }
-
-  private applyTermConversion(value: string): void {
-    if (!value) {
-      this.editCard.term = '';
-      this._cdr.detectChanges();
-      return;
-    }
-
-    if (this.editCard.typeface === JapaneseTypeface.HIRAGANA) {
-      this.editCard.term = this._wanakanaService.romajiToHiragana(value);
-    }
-
-    if (this.editCard.typeface === JapaneseTypeface.KATAKANA) {
-      this.editCard.term = this._wanakanaService.romajiToKatakana(value);
-    }
-
-    this._cdr.detectChanges();
-  }
-
-  private applyReadingConversion(value: string): void {
-    if (!value) {
-      this.editCard.reading = '';
-      this._cdr.detectChanges();
-      return;
-    }
-
-    if (this.editCard.typeface === JapaneseTypeface.HIRAGANA) {
-      this.editCard.reading = this._wanakanaService.romajiToHiragana(value);
-    }
-
-    if (this.editCard.typeface === JapaneseTypeface.KATAKANA) {
-      this.editCard.reading = this._wanakanaService.romajiToKatakana(value);
-    }
-
-    this._cdr.detectChanges();
   }
 }
