@@ -63,6 +63,9 @@ export class AccountOverviewComponent {
     scales: {
       x: {
         beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
       },
       y: {
         ticks: {
