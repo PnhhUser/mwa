@@ -1,6 +1,6 @@
 <div class="account-overview">
   <div class="account-overview__stat">
-    @for (card of statCardList; track card) {
+    @for (card of statCardList(); track card) {
       <app-stat-card [card]="card" />
     }
   </div>
@@ -9,7 +9,7 @@
     <nz-card class="account-overview__chart" nzTitle="Lượng tuy cập trong ngày">
       <canvas
         baseChart
-        [data]="lineChartData"
+        [data]="lineChartData()"
         [options]="lineChartOptions"
         [type]="lineChartType"
       ></canvas>

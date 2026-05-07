@@ -57,9 +57,7 @@ export class CardDetailComponent implements OnInit {
 
   private _speechService = inject(SpeechService);
   private _drawerRef = inject(NzDrawerRef);
-  private _wanakanaService = inject(WanakanaService);
   public dictionaryService = inject(DictionaryService);
-  private _cdr = inject(ChangeDetectorRef);
 
   protected isEdit = signal<boolean>(false);
   protected readonly JapaneseType = JapaneseType;
@@ -70,29 +68,19 @@ export class CardDetailComponent implements OnInit {
   currentTypeface = signal<JapaneseTypeface>(JapaneseTypeface.HIRAGANA);
 
   ngOnInit(): void {
-    // Clone card data
     this.card = { ...this.card, kanaType: Number(this.card.kanaType ?? 0) };
     this.editCard = { ...this.card };
     this.currentTypeface.set(this.editCard.typeface);
   }
 
-  /**
-   * Xử lý khi term thay đổi từ JpInputComponent
-   */
   onTermChange(value: string) {
     this.editCard.term = value;
   }
 
-  /**
-   * Xử lý khi reading thay đổi từ JpInputComponent
-   */
   onReadingChange(value: string) {
     this.editCard.reading = value;
   }
 
-  /**
-   * Khi typeface thay đổi, cập nhật signal
-   */
   onTypefaceChange(value: JapaneseTypeface) {
     this.editCard.typeface = value;
     this.currentTypeface.set(value);

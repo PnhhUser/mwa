@@ -15,6 +15,11 @@ export class ManageListComponent {
   private readonly _japaneseService = inject(JapaneseService);
   private readonly _accountService = inject(AccountService);
 
+  ngOnInit(): void {
+    this._japaneseService.load();
+    this._accountService.load();
+  }
+
   readonly cardManageList = computed<ManageCard[]>(() => {
     const accountCount = this._accountService.data().length;
     const japaneseCount = this._japaneseService.data().length;
@@ -26,9 +31,4 @@ export class ManageListComponent {
 
     return getManageMap(counts);
   });
-
-  ngOnInit(): void {
-    this._japaneseService.load();
-    this._accountService.load();
-  }
 }

@@ -1,5 +1,5 @@
 <div class="account-action">
-  <button nz-button class="account-action__btn">Thêm tài khoản</button>
+  <button nz-button class="account-action__btn" (click)="handleAddDrawer()">Thêm tài khoản</button>
   <input
     nz-input
     type="text"
@@ -13,4 +13,9 @@
   [data]="filteredData()"
   [columns]="colConfig"
   (rowClick)="handleRowClick($event)"
+  [trackKey]="'id'"
 ></app-table>
+
+<ng-template #extraTpl>
+  <app-drawer-close (remove)="handleRemove()"></app-drawer-close>
+</ng-template>

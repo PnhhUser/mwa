@@ -30,8 +30,15 @@ export class AvatarComponent {
   private _autService = inject(AuthService);
   protected readonly avatar = 'assets/images/avatar.jpg';
   private _collapseService = inject(CollapseService);
+  private _authService = inject(AuthService);
 
   isCollapsed = this._collapseService.isCollapsed;
+
+  name = '';
+
+  ngOnInit(): void {
+    this.name = this._authService.data().displayName;
+  }
 
   logout(): void {
     this._autService.logout();

@@ -5,7 +5,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { filter, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { getManageLabel, getManageMap } from '../../core/config/manage.config';
+import { getManageLabel } from '../../core/config/manage.config';
 
 interface BreadcrumbItem {
   label: string;
@@ -93,10 +93,6 @@ export class BreadcrumbComponent implements OnInit {
 
     return typeof breadcrumbData === 'object' ? breadcrumbData.label : breadcrumbData;
   }
-
-  // private formatLabel(raw: string): string {
-  //   return StringHelper.capitalizeFirstLetter(StringHelper.formatSlugToText(raw));
-  // }
 
   isLastBreadcrumb(index: number): boolean {
     return index === this.breadcrumbs().length - 1;

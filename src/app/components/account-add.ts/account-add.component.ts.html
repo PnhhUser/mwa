@@ -1,0 +1,70 @@
+<div class="account-add">
+  <div class="account-add__content">
+    <nz-list>
+      <nz-list-item>
+        <span>Tên người:</span>
+        <div class="field-input">
+          <input
+            nz-input
+            [(ngModel)]="accountData.username"
+            placeholder="Nhập tên người dùng"
+            [class.error]="hasError('username')"
+          />
+          @if (hasError('username')) {
+            <div class="error-message">{{ getErrorMessage('username') }}</div>
+          }
+        </div>
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Email:</span>
+        <div class="field-input">
+          <input
+            nz-input
+            type="email"
+            [(ngModel)]="accountData.email"
+            placeholder="vd: user@gmail.com"
+            [class.error]="hasError('email')"
+          />
+          @if (hasError('email')) {
+            <div class="error-message">{{ getErrorMessage('email') }}</div>
+          }
+        </div>
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Mật khẩu:</span>
+        <div class="field-input">
+          <input
+            nz-input
+            type="password"
+            [(ngModel)]="accountData.password"
+            placeholder="Nhập mật khẩu (ít nhất 6 ký tự)"
+            [class.error]="hasError('password')"
+          />
+          @if (hasError('password')) {
+            <div class="error-message">{{ getErrorMessage('password') }}</div>
+          }
+        </div>
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Vai trò:</span>
+        <nz-select [(ngModel)]="accountData.role" style="width: 200px">
+          <nz-option [nzValue]="role.user" nzLabel="User"></nz-option>
+          <nz-option [nzValue]="role.admin" nzLabel="Admin"></nz-option>
+        </nz-select>
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Kích hoạt:</span>
+        <nz-switch [(ngModel)]="accountData.isActive" nzSize="small" />
+      </nz-list-item>
+    </nz-list>
+  </div>
+
+  <div class="account-add__actions">
+    <button nz-button nzType="primary" (click)="onConfirm()">Thêm mới</button>
+    <button nz-button (click)="onCancel()">Hủy bỏ</button>
+  </div>
+</div>

@@ -52,33 +52,26 @@ export class FlashCardComponent {
     this._japaneseService.load();
   }
 
-  onChange(s: string) {
-    console.log(s);
-  }
-
   protected readonly colConfig: TableColumnConfig<JapaneseModel>[] = [
     {
       header: 'Hiển thị',
       key: 'isShow',
-      width: '105px',
+      width: '85px',
       isStatus: true,
       align: 'center',
-      sortable: true,
     },
     {
       header: 'Loại thẻ',
       key: 'type',
       isType: true,
-      width: '105px',
-      sortable: true,
+      width: '85px',
       align: 'center',
     },
     {
       header: 'Loại chữ',
       key: 'typeface',
       isTypeface: true,
-      width: '105px',
-      sortable: true,
+      width: '88px',
       align: 'center',
     },
     { header: 'Mục học', key: 'term', isBold: true },

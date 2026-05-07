@@ -3,7 +3,7 @@ import { StatCard } from '../../model/stat-card.mode';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
 import { JapaneseService } from '../../core/services/Japanese.service';
 
-import { JapaneseStatConfig, StatConfig } from '../../core/config/stat.config';
+import { JapaneseType, JapaneseTypeface } from '../../model/japanese.model';
 
 @Component({
   selector: 'app-product-overview',
@@ -15,22 +15,18 @@ import { JapaneseStatConfig, StatConfig } from '../../core/config/stat.config';
 export class ProductOverviewComponent {
   private readonly _japaneseService = inject(JapaneseService);
 
-  ngOnInit(): void {
-    this._japaneseService.load();
-  }
-
-  private readonly statConfigs: StatConfig[] = JapaneseStatConfig;
-
-  statCardList = computed<StatCard[]>(() => {
-    const data = this._japaneseService.data().filter((x) => x.isShow);
-
-    return this.statConfigs.map((config) => ({
-      name: config.name,
-      stat: this.count(data, config.predicate),
-    }));
-  });
-
-  private count<T>(list: T[], predicate: (item: T) => boolean): number {
-    return list.reduce((acc, item) => acc + (predicate(item) ? 1 : 0), 0);
-  }
+  readonly statCardList = computed<StatCard[]>(() => [
+    {
+      name: 'Thẻ Hiragana',
+      stat: this._japaneseService
+        .data()
+        .filter(
+          (i) => i.typeface === JapaneseTypeface.HIRAGANA && i.type === JapaneseType.CHARACTER,
+        ).length,
+    },
+    {
+      name: 'Thẻ từ vựng',
+      stat: this._japaneseService.data().filter((i) => i.type === JapaneseType.VOCABULARY).length,
+    },
+  ]);
 }

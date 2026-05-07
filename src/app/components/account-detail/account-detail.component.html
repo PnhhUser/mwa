@@ -1,0 +1,104 @@
+<div class="account-detail">
+  <div class="account-detail__content">
+    <div class="account-detail__index">
+      <span>ID: </span>
+      <strong>{{ editData.id }}</strong>
+    </div>
+    <nz-list>
+      <nz-list-item>
+        <span>Người dùng:</span>
+        @if (!isEdit()) {
+          {{ editData.username }}
+        }
+
+        @if (isEdit()) {
+          <div class="field-input">
+            <input
+              nz-input
+              [(ngModel)]="editData.username"
+              style="width: 200px"
+              placeholder="Nhập tên người dùng"
+            />
+
+            @if (hasError('username')) {
+              <div class="error-message">{{ getErrorMessage('username') }}</div>
+            }
+          </div>
+        }
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Email:</span>
+        @if (!isEdit()) {
+          {{ editData.email }}
+        }
+
+        @if (isEdit()) {
+          <div class="field-input">
+            <input
+              nz-input
+              type="email"
+              [(ngModel)]="editData.email"
+              style="width: 200px"
+              placeholder="vd: user@gmail.com"
+            />
+
+            @if (hasError('email')) {
+              <div class="error-message">{{ getErrorMessage('email') }}</div>
+            }
+          </div>
+        }
+      </nz-list-item>
+
+      @if (isEdit()) {
+        <nz-list-item>
+          <span>Mật khẩu:</span>
+          <div class="field-input">
+            <input
+              nz-input
+              type="password"
+              [(ngModel)]="editData.password"
+              style="width: 200px"
+              placeholder="*********"
+            />
+          </div>
+        </nz-list-item>
+      }
+
+      <nz-list-item>
+        <span>Vai trò:</span>
+        @if (!isEdit()) {
+          {{ formatRole(editData.role) }}
+        }
+
+        @if (isEdit()) {
+          <nz-select [(ngModel)]="editData.role" style="width: 200px">
+            <nz-option [nzValue]="role.user" nzLabel="User"></nz-option>
+            <nz-option [nzValue]="role.admin" nzLabel="Admin"></nz-option>
+          </nz-select>
+        }
+      </nz-list-item>
+
+      <nz-list-item>
+        <span>Kích hoạt:</span>
+        @if (!isEdit()) {
+          <nz-tag [nzColor]="formatColor(editData.isActive)">
+            {{ editData.isActive ? 'Có' : 'Không' }}
+          </nz-tag>
+        }
+
+        @if (isEdit()) {
+          <nz-switch [(ngModel)]="editData.isActive" nzSize="small" />
+        }
+      </nz-list-item>
+    </nz-list>
+  </div>
+  <div class="account-detail__actions">
+    @if (isEdit()) {
+      <button nz-button nzType="primary" (click)="onConfirm()">Xác nhận</button>
+      <button nz-button nzDanger (click)="onCancel()">Hủy</button>
+    } @else {
+      <button nz-button nzType="primary" (click)="onEdit()">Thay đổi</button>
+    }
+  </div>
+</div>
