@@ -23,7 +23,9 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private _isLoginIn = LocalHelper.get<boolean>(this._FLAG_KEY) === true;
+  private _hasLoginFlag  = LocalHelper.get<boolean>(this._FLAG_KEY) === true;
+
+  private _isAuthenticated = false;
   private readonly _data = signal<AuthResponseModel>(
     LocalHelper.get<AuthResponseModel>(this._DATA_KEY) ?? { id: '', displayName: '', role: '' },
   );
@@ -31,7 +33,7 @@ export class AuthService {
   readonly data = this._data.asReadonly();
 
   public get isAuthenticated(): boolean {
-    return this._isLoginIn;
+    return this._isAuthenticated;
   }
 
   login(dto: any): Observable<any> {
@@ -44,27 +46,32 @@ export class AuthService {
     );
   }
 
-  checkAuthStatus(): Observable<boolean> {
-    if (!LocalHelper.get<boolean>(this._FLAG_KEY)) {
-      this.purgeAuth();
-      return of(false);
-    }
-
-    return this.http
-      .post<ApiResponseModel<AuthResponseModel>>(`${this._API_URL}/refresh-token`, {})
-      .pipe(
-        tap((res) => {
-          if (res.success && res.data) {
-            this.setAuthData(res.data);
-          }
-        }),
-        map((res) => res.success),
-        catchError(() => {
-          this.purgeAuth();
-          return of(false);
-        }),
-      );
+checkAuthStatus(): Observable<boolean> {
+  if (!this._hasLoginFlag) {
+    return of(false);
   }
+
+  return this.http
+    .post<ApiResponseModel<AuthResponseModel>>(
+      `${this._API_URL}/refresh-token`,
+      {},
+    )
+    .pipe(
+      tap((res) => {
+        if (res.success && res.data) {
+          this.setAuthData(res.data);
+        }
+      }),
+      map((res) => {
+        this._isAuthenticated = res.success;
+        return res.success;
+      }),
+      catchError(() => {
+        this.purgeAuth();
+        return of(false);
+      }),
+    );
+}
 
   refreshToken(): Observable<any> {
     if (!this.isAuthenticated) return of(null);
@@ -103,7 +110,7 @@ export class AuthService {
     LocalHelper.set(this._FLAG_KEY, true);
     LocalHelper.set(this._DATA_KEY, data);
 
-    this._isLoginIn = true;
+    this._hasLoginFlag  = true;
     this._data.set(data);
     this.startRefreshTimer();
   }
@@ -112,7 +119,8 @@ export class AuthService {
     LocalHelper.remove(this._FLAG_KEY);
     LocalHelper.remove(this._DATA_KEY);
 
-    this._isLoginIn = false;
+    this._hasLoginFlag  = false;
+    this._isAuthenticated = false;
     this._data.set({ id: '', displayName: '', role: '' });
     this.clearTimer();
   }

@@ -7,15 +7,23 @@ import { LoginPage } from './pages/login/login.page';
 import ROUTES_PATH from './core/consts/route.const';
 
 export const routes: Routes = [
+   {
+    path: ROUTES_PATH.login,
+    component: LoginPage,
+    canActivate: [guestGuard],
+  },
   {
     path: '',
     component: LayoutMain,
     canActivate: [authGuard],
-    children: [{ path: '', redirectTo: ROUTES_PATH.manage, pathMatch: 'full' }, ...ManageRoute],
-  },
-  {
-    path: ROUTES_PATH.login,
-    component: LoginPage,
-    canActivate: [guestGuard],
+    children: [
+      { 
+        path: '', 
+        redirectTo: ROUTES_PATH.manage, 
+        pathMatch: 'full' 
+      }
+      , 
+      ...ManageRoute
+    ]
   },
 ];
