@@ -23,11 +23,14 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private _hasLoginFlag  = LocalHelper.get<boolean>(this._FLAG_KEY) === true;
-
-  private _isAuthenticated = false;
+  // Khởi tạo state từ localStorage
+  private _isAuthenticated = LocalHelper.get<boolean>(this._FLAG_KEY) === true;
   private readonly _data = signal<AuthResponseModel>(
-    LocalHelper.get<AuthResponseModel>(this._DATA_KEY) ?? { id: '', displayName: '', role: '' },
+    LocalHelper.get<AuthResponseModel>(this._DATA_KEY) ?? { 
+      id: '', 
+      displayName: '', 
+      role: '' 
+    }
   );
 
   readonly data = this._data.asReadonly();
@@ -37,7 +40,10 @@ export class AuthService {
   }
 
   login(dto: any): Observable<any> {
-    return this.http.post<ApiResponseModel<AuthResponseModel>>(`${this._API_URL}/login`, dto).pipe(
+    return this.http.post<ApiResponseModel<AuthResponseModel>>(
+      `${this._API_URL}/login`, 
+      dto
+    ).pipe(
       tap((res) => {
         if (res.success && res.data) {
           this.setAuthData(res.data);
@@ -46,38 +52,45 @@ export class AuthService {
     );
   }
 
-checkAuthStatus(): Observable<boolean> {
-  if (!this._hasLoginFlag) {
-    return of(false);
-  }
-
-  return this.http
-    .post<ApiResponseModel<AuthResponseModel>>(
-      `${this._API_URL}/refresh-token`,
-      {},
-    )
-    .pipe(
-      tap((res) => {
-        if (res.success && res.data) {
-          this.setAuthData(res.data);
-        }
-      }),
-      map((res) => {
-        this._isAuthenticated = res.success;
-        return res.success;
-      }),
-      catchError(() => {
-        this.purgeAuth();
-        return of(false);
-      }),
-    );
-}
-
-  refreshToken(): Observable<any> {
-    if (!this.isAuthenticated) return of(null);
+  checkAuthStatus(): Observable<boolean> {
+    // Nếu chưa có flag login trong storage => chưa đăng nhập
+    if (!LocalHelper.get<boolean>(this._FLAG_KEY)) {
+      return of(false);
+    }
 
     return this.http
-      .post<ApiResponseModel<AuthResponseModel>>(`${this._API_URL}/refresh-token`, {})
+      .post<ApiResponseModel<AuthResponseModel>>(
+        `${this._API_URL}/refresh-token`,
+        {}
+      )
+      .pipe(
+        tap((res) => {
+          if (res.success && res.data) {
+            this.setAuthData(res.data);
+          }
+        }),
+        map((res) => {
+          this._isAuthenticated = res.success;
+          return res.success;
+        }),
+        catchError(() => {
+          this.purgeAuth();
+          return of(false);
+        }),
+      );
+  }
+
+  refreshToken(): Observable<any> {
+    // Kiểm tra state hiện tại
+    if (!this._isAuthenticated) {
+      return of(null);
+    }
+
+    return this.http
+      .post<ApiResponseModel<AuthResponseModel>>(
+        `${this._API_URL}/refresh-token`, 
+        {}
+      )
       .pipe(
         tap((res) => {
           if (res.success && res.data) {
@@ -101,41 +114,63 @@ checkAuthStatus(): Observable<boolean> {
           this.router.navigate([`/${ROUTES_PATH.login}`]);
         }),
       )
-      .subscribe((res) => {
-        if (res.success) this._alertService.show('', res.message, 'success');
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this._alertService.show('', res.message, 'success');
+          }
+        },
+        error: (err) => {
+          console.error('Logout error:', err);
+        }
       });
   }
 
   private setAuthData(data: AuthResponseModel): void {
+    // Lưu vào localStorage
     LocalHelper.set(this._FLAG_KEY, true);
     LocalHelper.set(this._DATA_KEY, data);
 
-    this._hasLoginFlag  = true;
+    // Cập nhật state
+    this._isAuthenticated = true;
     this._data.set(data);
+    
+    // Khởi động timer refresh token
     this.startRefreshTimer();
   }
 
   private purgeAuth(): void {
+    // Xóa localStorage
     LocalHelper.remove(this._FLAG_KEY);
     LocalHelper.remove(this._DATA_KEY);
 
-    this._hasLoginFlag  = false;
+    // Reset state
     this._isAuthenticated = false;
-    this._data.set({ id: '', displayName: '', role: '' });
+    this._data.set({ 
+      id: '', 
+      displayName: '', 
+      role: '' 
+    });
+    
+    // Clear timer
     this.clearTimer();
   }
 
   private startRefreshTimer(): void {
     this.clearTimer();
-    const delay = 28800000; // 8 tiếng
+    const delay = 28800000; // 8 tiếng (nên tính toán dựa trên thời gian hết hạn token thực tế)
     this._refreshTimer = setTimeout(() => {
-      this.refreshToken().subscribe();
+      // Chỉ refresh nếu vẫn còn authenticated
+      if (this._isAuthenticated) {
+        this.refreshToken().subscribe();
+      }
     }, delay);
   }
 
   private clearTimer(): void {
     if (this._refreshTimer) {
       clearTimeout(this._refreshTimer);
+      this._refreshTimer = null;
     }
   }
 }
